@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>My Warehouse</string>
   </property>
-  <widget class="QTableWidget" name="tableWidget">
+  <widget class="QTableWidget" name="tbl_items">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -290,7 +290,7 @@ color: rgb(255, 255, 255);</string>
  <tabstops>
   <tabstop>txt_search</tabstop>
   <tabstop>btn_search</tabstop>
-  <tabstop>tableWidget</tabstop>
+  <tabstop>tbl_items</tabstop>
   <tabstop>btn_insert</tabstop>
   <tabstop>btn_edit</tabstop>
   <tabstop>btn_save</tabstop>
