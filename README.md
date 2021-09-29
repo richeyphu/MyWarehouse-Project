@@ -1,7 +1,6 @@
 # MyWarehouse-Project
 **My Warehouse** is a simple warehouse management software. Lightweight and easy to use.
 
->*In partial fulfillment of the requirements for the course "INT-303: Software Engineering (1/2564)"*
 
 ## Usage
 
@@ -25,3 +24,6 @@ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 
 ## Docs
 - [MyWarehouse's Docs](https://richeyphu.github.io/MyWarehouse-Project/)
+
+
+>*In partial fulfillment of the requirements for the course "INT-303: Software Engineering (1/2564)"*
