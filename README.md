@@ -1,8 +1,8 @@
 # MyWarehouse-Project
-**My Warehouse** is a simple warehouse management software. 
-- Very lightweight and easy to use
-- Easily select, insert, update and delete data with GUI
-- Supports exporting data to a CSV file
+**My Warehouse** is a simple warehouse management software.  
+> :white_check_mark: Very lightweight and easy to use  
+> :white_check_mark: Easily select, insert, update and delete data with GUI  
+> :white_check_mark: Supports exporting data to a CSV file  
 
 
 ## Usage
@@ -26,7 +26,7 @@ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 
 
 ## Docs
-- [MyWarehouse's Docs](https://richeyphu.github.io/MyWarehouse-Project/)
+- [MyWarehouse's Docs](https://richeyphu.github.io/MyWarehouse-Project/){:target="_blank"}
 
 
 >*In partial fulfillment of the requirements for the course "INT-303: Software Engineering (1/2564)"*
