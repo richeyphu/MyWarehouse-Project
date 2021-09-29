@@ -3,7 +3,7 @@ INT-303: Software Engineering Final Project (1/2564)
 
 ## Usage
 
-### Git
+### Git Clone
 ```bash 
 git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
