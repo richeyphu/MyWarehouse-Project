@@ -1,6 +1,7 @@
 # MyWarehouse-Project
-INT-303: Software Engineering Final Project (1/2564)
+**My Warehouse** is a simple warehouse management software. Lightweight and easy to use.
 
+>*In partial fulfillment of the requirements for the course "INT-303: Software Engineering (1/2564)"*
 
 ## Usage
 
