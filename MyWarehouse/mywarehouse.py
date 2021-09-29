@@ -171,6 +171,9 @@ class Ui_frm_mywh(object):
         self.btn_insert.setText(_translate("frm_mywh", "Insert"))
         self.btn_edit.setText(_translate("frm_mywh", "Edit"))
 
+        # Event-Driven
+
+
 
 if __name__ == "__main__":
     import sys
