@@ -2,7 +2,7 @@
 **My Warehouse** is a simple warehouse management software. 
 - Very lightweight and easy to use
 - Easily select, insert, update and delete data with GUI
-- Supports exporting data to a CSV file.
+- Supports exporting data to a CSV file
 
 
 ## Usage
