@@ -89,7 +89,7 @@ class Ui_frm_mywh(object):
         font.setPointSize(30)
         self.lbl_header.setFont(font)
         self.lbl_header.setStyleSheet("background-color: rgb(0, 170, 255);\n"
-"color: rgb(255, 255, 255);")
+                                      "color: rgb(255, 255, 255);")
         self.lbl_header.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_header.setObjectName("lbl_header")
         self.lbl_credit = QtWidgets.QLabel(frm_mywh)
@@ -174,6 +174,7 @@ class Ui_frm_mywh(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     frm_mywh = QtWidgets.QWidget()
     ui = Ui_frm_mywh()
