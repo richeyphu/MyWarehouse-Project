@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import WHLib as WL
 
 
 class Ui_frm_mywh(object):
@@ -17,7 +18,7 @@ class Ui_frm_mywh(object):
         frm_mywh.resize(1000, 770)
         frm_mywh.setMinimumSize(QtCore.QSize(1000, 770))
         frm_mywh.setMaximumSize(QtCore.QSize(1000, 770))
-        self.tbl_items = QtWidgets.QTableWidget(frm_mywh)
+        self.tbl_items = WL.WhTableWidget(frm_mywh)
         self.tbl_items.setGeometry(QtCore.QRect(20, 150, 961, 561))
         font = QtGui.QFont()
         font.setFamily("Kanit Light")
@@ -130,6 +131,10 @@ class Ui_frm_mywh(object):
         frm_mywh.setTabOrder(self.btn_edit, self.btn_save)
         frm_mywh.setTabOrder(self.btn_save, self.btn_export)
 
+        # Event-Driven
+
+        self.tbl_items.resizeRowsToContents()
+
     def retranslateUi(self, frm_mywh):
         _translate = QtCore.QCoreApplication.translate
         frm_mywh.setWindowTitle(_translate("frm_mywh", "My Warehouse"))
@@ -149,6 +154,16 @@ class Ui_frm_mywh(object):
         item.setText(_translate("frm_mywh", "Total"))
         __sortingEnabled = self.tbl_items.isSortingEnabled()
         self.tbl_items.setSortingEnabled(False)
+        self.tbl_items.setSortingEnabled(__sortingEnabled)
+        self.btn_search.setText(_translate("frm_mywh", "Search"))
+        self.btn_export.setText(_translate("frm_mywh", "Export"))
+        self.btn_save.setText(_translate("frm_mywh", "Save"))
+        self.lbl_header.setText(_translate("frm_mywh", "My Warehouse"))
+        self.lbl_credit.setText(_translate("frm_mywh", "Developed by DidITired House Co., Ltd."))
+        self.lbl_found.setText(_translate("frm_mywh", "พบ 1 รายการ"))
+        self.btn_insert.setText(_translate("frm_mywh", "Insert"))
+        self.btn_edit.setText(_translate("frm_mywh", "Edit"))
+
         item = self.tbl_items.item(0, 1)
         item.setText(_translate("frm_mywh", "21000001"))
         item = self.tbl_items.item(0, 2)
@@ -161,18 +176,6 @@ class Ui_frm_mywh(object):
         item.setText(_translate("frm_mywh", "3"))
         item = self.tbl_items.item(0, 6)
         item.setText(_translate("frm_mywh", "900"))
-        self.tbl_items.setSortingEnabled(__sortingEnabled)
-        self.btn_search.setText(_translate("frm_mywh", "Search"))
-        self.btn_export.setText(_translate("frm_mywh", "Export"))
-        self.btn_save.setText(_translate("frm_mywh", "Save"))
-        self.lbl_header.setText(_translate("frm_mywh", "My Warehouse"))
-        self.lbl_credit.setText(_translate("frm_mywh", "Developed by DidITired House Co., Ltd."))
-        self.lbl_found.setText(_translate("frm_mywh", "พบ 1 รายการ"))
-        self.btn_insert.setText(_translate("frm_mywh", "Insert"))
-        self.btn_edit.setText(_translate("frm_mywh", "Edit"))
-
-        # Event-Driven
-
 
 
 if __name__ == "__main__":
