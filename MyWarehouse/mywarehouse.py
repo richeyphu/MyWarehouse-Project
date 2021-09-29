@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import WHLib as WL
+import WHLib as Wl
 import sqlite3
 
 
@@ -20,7 +20,7 @@ class Ui_frm_mywh(object):
         frm_mywh.resize(1000, 770)
         frm_mywh.setMinimumSize(QtCore.QSize(1000, 770))
         frm_mywh.setMaximumSize(QtCore.QSize(1000, 770))
-        self.tbl_items = WL.WhTableWidget(frm_mywh)
+        self.tbl_items = Wl.WhTableWidget(frm_mywh)
         self.tbl_items.setGeometry(QtCore.QRect(20, 150, 961, 561))
         font = QtGui.QFont()
         font.setFamily("Kanit Light")
@@ -159,7 +159,7 @@ class Ui_frm_mywh(object):
         row = 0
         for i in result:
             print(i.keys())
-            tempbtn = WL.WhButton(i["prod_id"], self.tbl_items)
+            tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
             tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.updaterow(x))
             self.afterRetranslateUi(tempbtn, "Update")
             self.tbl_items.setCellWidget(row, 0, tempbtn)
