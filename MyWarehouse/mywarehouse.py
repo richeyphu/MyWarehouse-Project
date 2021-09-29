@@ -11,6 +11,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import WHLib as Wl
 import sqlite3
+import locale
+
+locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 
 class Ui_frm_mywh(object):
@@ -158,7 +161,6 @@ class Ui_frm_mywh(object):
         self.tbl_items.setRowCount(len(result))
         row = 0
         for i in result:
-            print(i.keys())
             tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
             tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.updaterow(x))
             self.afterRetranslateUi(tempbtn, "Update")
@@ -186,13 +188,53 @@ class Ui_frm_mywh(object):
             item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
             self.tbl_items.setItem(row, 6, item)
             row += 1
-        self.tbl_items.resizeRowsToContents()
         self.tbl_items.resizeColumnsToContents()
+        self.tbl_items.resizeRowsToContents()
 
     def updaterow(self, prod_id: str):
-        QtCore.QAbstractItemModel temptbl = self.tbl_items.model()
-        QtWidgets.QMessageBox.about(None, "Message", str(prod_id))
+        for i in range(self.tbl_items.rowCount()):
+            if self.tbl_items.item(i, 1).text() == str(prod_id):
+                self.row = i
+            btn = self.tbl_items.cellWidget(i, 0)
+            btn.disconnect()
+            btn.clicked.connect(self.nonesubmiterror)
+        c0 = self.tbl_items.cellWidget(self.row, 0)
+        self.afterRetranslateUi(c0, "Submit")
+        c0.disconnect()
+        c0.clicked.connect(lambda state, x=self.row: self.submitrow(x))
+        c2 = self.tbl_items.item(self.row, 2)
+        c2.setFlags(c2.flags() | QtCore.Qt.ItemIsEditable)
+        c3 = self.tbl_items.item(self.row, 3)
+        c3.setFlags(c3.flags() | QtCore.Qt.ItemIsEditable)
+        c4 = self.tbl_items.item(self.row, 4)
+        c4.setFlags(c4.flags() | QtCore.Qt.ItemIsEditable)
+        c5 = self.tbl_items.item(self.row, 5)
+        c5.setFlags(c5.flags() | QtCore.Qt.ItemIsEditable)
 
+    def nonesubmiterror(self):
+        QtWidgets.QMessageBox.about(None, "None Submit Row Detect",
+                                    "Row: {} is still in update mode\nPlease, finish updating".format(self.row + 1))
+
+    def submitrow(self, row: int):
+        response = QtWidgets.QMessageBox.question(None, "Submit Change",
+                                                  "Change on row {}. Are you sure?".format(row + 1),
+                                                  QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        if response == QtWidgets.QMessageBox.Yes:
+            btn = self.tbl_items.cellWidget(row, 0)
+            btn.disconnect()
+            btn.clicked.connect(lambda state, x=btn.id: self.updaterow(x))
+            self.afterRetranslateUi(btn, "Update")
+            c2 = self.tbl_items.item(row, 2)
+            c2.setFlags(c2.flags() & ~QtCore.Qt.ItemIsEditable)
+            c3 = self.tbl_items.item(row, 3)
+            c3.setFlags(c3.flags() & ~QtCore.Qt.ItemIsEditable)
+            c4 = self.tbl_items.item(row, 4)
+            c4.setFlags(c4.flags() & ~QtCore.Qt.ItemIsEditable)
+            c5 = self.tbl_items.item(row, 5)
+            c5.setFlags(c5.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.tbl_items.setItem(row, 6,
+                                   QtWidgets.QTableWidgetItem(
+                                       "{:,.2f}฿".format(locale.atof(c4.text()) * locale.atof(c5.text()))))
 
     def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
         _translate = QtCore.QCoreApplication.translate
