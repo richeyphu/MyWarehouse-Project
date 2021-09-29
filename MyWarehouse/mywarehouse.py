@@ -10,10 +10,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import WHLib as WL
+import sqlite3
 
 
 class Ui_frm_mywh(object):
     def setupUi(self, frm_mywh):
+        self.dbpath = "mywh_db.sqlite3"
         frm_mywh.setObjectName("frm_mywh")
         frm_mywh.resize(1000, 770)
         frm_mywh.setMinimumSize(QtCore.QSize(1000, 770))
@@ -133,7 +135,66 @@ class Ui_frm_mywh(object):
 
         # Event-Driven
 
+        self.searchDB()
+        self.btn_search.clicked.connect(self.searchDB)
+
+    def clear_table(self):
+        for i in range(self.tbl_items.rowCount()):
+            self.tbl_items.removeRow(1)
+
+    def searchDB(self):
+        self.clear_table()
+        search_text = self.txt_search.text()
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                            select * 
+                            from products
+                            where prod_id like '%{0}%'
+                            or prod_name like '%{0}%'
+                            or prod_desc like '%{0}%';
+                            """.format(search_text)
+            result = conn.execute(sql_command).fetchall()
+        self.tbl_items.setRowCount(len(result))
+        row = 0
+        for i in result:
+            print(i.keys())
+            tempbtn = WL.WhButton(i["prod_id"], self.tbl_items)
+            tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.updaterow(x))
+            self.afterRetranslateUi(tempbtn, "Update")
+            self.tbl_items.setCellWidget(row, 0, tempbtn)
+            item = QtWidgets.QTableWidgetItem(str(i["prod_id"]))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 1, item)
+            item = QtWidgets.QTableWidgetItem(i["prod_name"])
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.tbl_items.setItem(row, 2, item)
+            item = QtWidgets.QTableWidgetItem(i["prod_desc"])
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.tbl_items.setItem(row, 3, item)
+            item = QtWidgets.QTableWidgetItem("{:,.2f}".format(i["prod_price"]))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 4, item)
+            item = QtWidgets.QTableWidgetItem("{:,.0f}".format(i["prod_qty"]))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.tbl_items.setItem(row, 5, item)
+            item = QtWidgets.QTableWidgetItem("{:,.2f}฿".format(i["prod_price"] * float(i["prod_qty"])))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 6, item)
+            row += 1
         self.tbl_items.resizeRowsToContents()
+        self.tbl_items.resizeColumnsToContents()
+
+    def updaterow(self, prod_id: str):
+        QtWidgets.QMessageBox.about(None, "Message", str(prod_id))
+
+    def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
+        _translate = QtCore.QCoreApplication.translate
+        btn.setText(_translate("frm_mywh", text))
 
     def retranslateUi(self, frm_mywh):
         _translate = QtCore.QCoreApplication.translate

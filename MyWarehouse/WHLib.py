@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets
 
 
 class WhButton(QtWidgets.QPushButton):
-    def __init__(self, id: int, parent=None):
+    def __init__(self, id: str, parent=None):
         super(WhButton, self).__init__(parent=parent)
         self.id = id
 
@@ -11,8 +11,8 @@ class WhButton(QtWidgets.QPushButton):
 class WhTableWidget(QtWidgets.QTableWidget):
     def __init__(self, parent=None):
         super(WhTableWidget, self).__init__(parent=parent)
-        super().setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        super().horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        # super().setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers) # Move to individual item
+        # super().horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
 
 
 class WhVerticalScrollbar(QtWidgets.QScrollBar):
