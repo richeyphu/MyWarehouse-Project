@@ -1,5 +1,5 @@
 # MyWarehouse-Project
-**My Warehouse** is a simple warehouse management software. Lightweight and easy to use.
+**My Warehouse** is a simple warehouse management software. Very lightweight and easy to use.
 
 
 ## Usage
