@@ -190,7 +190,9 @@ class Ui_frm_mywh(object):
         self.tbl_items.resizeColumnsToContents()
 
     def updaterow(self, prod_id: str):
+        QtCore.QAbstractItemModel temptbl = self.tbl_items.model()
         QtWidgets.QMessageBox.about(None, "Message", str(prod_id))
+
 
     def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
         _translate = QtCore.QCoreApplication.translate
