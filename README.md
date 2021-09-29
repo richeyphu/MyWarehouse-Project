@@ -10,9 +10,9 @@ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
 
 ### Required Packages
-- PyQt5
-- PyQt5-stubs
-- pyqt5-tools
+- `PyQt5`
+- `PyQt5-stubs`
+- `pyqt5-tools`
 
 
 ## Development Tools
