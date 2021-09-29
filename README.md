@@ -14,6 +14,7 @@ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 - PyQt5-stubs
 - pyqt5-tools
 
+
 ## Development Tools
 * **IDE :** `PyCharm Professional 2021.2 or newer`
 * **Interpreter :** `Python 3.9`
