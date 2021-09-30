@@ -17,7 +17,7 @@ or
 ```bash
 repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ```
-### Sync Repository
+##### Sync Repository
 ```bash
 repo sync
 ```
