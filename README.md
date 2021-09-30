@@ -11,7 +11,7 @@
 ```bash 
 git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
-##### Git Pull (git fetch + git merge)
+**Git Pull (git fetch + git merge)**
 ```bash 
 git pull
 ```
@@ -20,7 +20,7 @@ git pull
 ```bash
 repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ```
-##### Sync Repository
+**Sync Repository**
 ```bash
 repo sync
 ```
