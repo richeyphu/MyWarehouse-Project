@@ -202,6 +202,12 @@ class Ui_frm_mywh(object):
         self.afterRetranslateUi(c0, "Submit")
         c0.disconnect()
         c0.clicked.connect(lambda state, x=self.row: self.submitrow(x))
+        font = QtGui.QFont()
+        font.setFamily("Kanit Light")
+        font.setBold(True)
+        font.setPointSize(12)
+        c1 = self.tbl_items.item(self.row, 1)
+        c1.setFont(font)
         c2 = self.tbl_items.item(self.row, 2)
         c2.setFlags(c2.flags() | QtCore.Qt.ItemIsEditable)
         c3 = self.tbl_items.item(self.row, 3)
@@ -210,6 +216,8 @@ class Ui_frm_mywh(object):
         c4.setFlags(c4.flags() | QtCore.Qt.ItemIsEditable)
         c5 = self.tbl_items.item(self.row, 5)
         c5.setFlags(c5.flags() | QtCore.Qt.ItemIsEditable)
+        c6 = self.tbl_items.item(self.row, 6)
+        c6.setFont(font)
 
     def nonesubmiterror(self):
         QtWidgets.QMessageBox.about(None, "None Submit Row Detect",
@@ -220,10 +228,17 @@ class Ui_frm_mywh(object):
                                                   "Change on row {}. Are you sure?".format(row + 1),
                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if response == QtWidgets.QMessageBox.Yes:
-            btn = self.tbl_items.cellWidget(row, 0)
-            btn.disconnect()
-            btn.clicked.connect(lambda state, x=btn.id: self.updaterow(x))
-            self.afterRetranslateUi(btn, "Update")
+            for i in range(self.tbl_items.rowCount()):
+                btn = self.tbl_items.cellWidget(i, 0)
+                btn.disconnect()
+                btn.clicked.connect(lambda state, x=btn.id: self.updaterow(x))
+                self.afterRetranslateUi(btn, "Update")
+            font = QtGui.QFont()
+            font.setFamily("Kanit Light")
+            font.setBold(False)
+            font.setPointSize(12)
+            c1 = self.tbl_items.item(row, 1)
+            c1.setFont(font)
             c2 = self.tbl_items.item(row, 2)
             c2.setFlags(c2.flags() & ~QtCore.Qt.ItemIsEditable)
             c3 = self.tbl_items.item(row, 3)
@@ -232,9 +247,11 @@ class Ui_frm_mywh(object):
             c4.setFlags(c4.flags() & ~QtCore.Qt.ItemIsEditable)
             c5 = self.tbl_items.item(row, 5)
             c5.setFlags(c5.flags() & ~QtCore.Qt.ItemIsEditable)
-            self.tbl_items.setItem(row, 6,
-                                   QtWidgets.QTableWidgetItem(
-                                       "{:,.2f}฿".format(locale.atof(c4.text()) * locale.atof(c5.text()))))
+            c6 = QtWidgets.QTableWidgetItem(
+                "{:,.2f}฿".format(locale.atof(c4.text()) * locale.atof(c5.text())))
+            c6.setFont(font)
+            c6.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 6, c6)
 
     def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
         _translate = QtCore.QCoreApplication.translate
