@@ -137,13 +137,37 @@ class Ui_frm_mywh(object):
         frm_mywh.setTabOrder(self.btn_save, self.btn_export)
 
         # Event-Driven
-
+        self.btn_save.setEnabled(False)
+        self.btn_edit.setEnabled(False)
         self.searchDB()
         self.btn_search.clicked.connect(self.searchDB)
+        # self.btn_save.clicked.connect(self.save)
+        # self.btn_insert.clicked.connect(self.cellInsert)
 
     def clear_table(self):
         for i in range(self.tbl_items.rowCount()):
             self.tbl_items.removeRow(1)
+
+    def save(self):
+        if not self.btn_insert.isEnabled():
+            self.btn_insert.setEnabled(True)
+        if self.btn_save.isEnabled():
+            # Save stuff
+            self.btn_save.setEnabled(False)
+
+    def cellInsert(self):
+        self.tbl_items.insertRow(0)
+        self.btn_insert.setEnabled(False)
+        self.btn_save.setEnabled(True)
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                            select * 
+                            from products
+                            ORDER BY Prod_id DESC
+                            LIMIT 1;
+                            """
+            result = conn.execute(sql_command).fetchall()
 
     def searchDB(self):
         self.clear_table()
@@ -252,6 +276,9 @@ class Ui_frm_mywh(object):
             c6.setFont(font)
             c6.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
             self.tbl_items.setItem(row, 6, c6)
+            self.btn_save.setEnabled(True)
+            self.tbl_items.resizeColumnsToContents()
+            self.tbl_items.resizeRowsToContents()
 
     def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
         _translate = QtCore.QCoreApplication.translate
