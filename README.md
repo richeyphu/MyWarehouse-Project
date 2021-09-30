@@ -11,6 +11,17 @@
 ```bash 
 git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
+or
+
+# Initialize Repository
+```bash
+repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
+```
+# Sync Repository
+```bash
+repo sync
+```
+
 
 ### Required Packages
 - [`PyQt5`](https://pypi.org/project/PyQt5/)
