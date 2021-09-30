@@ -13,11 +13,11 @@ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
 or
 
-# Initialize Repository
+### Initialize Repository
 ```bash
 repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ```
-# Sync Repository
+### Sync Repository
 ```bash
 repo sync
 ```
