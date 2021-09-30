@@ -29,4 +29,4 @@ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 - [MyWarehouse's Docs](https://richeyphu.github.io/MyWarehouse-Project/)
 
 
->*In partial fulfillment of the requirements for the course "INT-303: Software Engineering (1/2564)"*
+>*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*
