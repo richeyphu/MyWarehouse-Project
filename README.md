@@ -11,8 +11,11 @@
 ```bash 
 git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
-or
-
+##### Git Pull (git fetch + git merge)
+```bash 
+git pull
+```
+***or***
 ### Initialize Repository
 ```bash
 repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
