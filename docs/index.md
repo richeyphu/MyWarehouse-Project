@@ -45,6 +45,7 @@ $ repo sync
 4. Commit
 5. Export
 
+---
 ## Developed by
 <div align="center">
 <img width="400" height="400" src="img/DidITire-1.png" alt="DidITire Logo">
