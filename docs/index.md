@@ -1,4 +1,17 @@
-## MyWarehouse
+<div align="center">
+<img width="400" height="400" src="logo/MyWarehouse-2.png" alt="My Warehouse Logo">
+</div>
+
+## My Warehouse
+**My Warehouse** is a simple warehouse management software.  
+> :heavy_check_mark: Very lightweight and easy to use  
+> :heavy_check_mark: Easily select, insert, update and delete data with GUI  
+> :heavy_check_mark: Supports exporting data to a CSV file  
+
+## Developed by
+<div align="center">
+<img width="400" height="400" src="logo/MyWarehouse-2.png" alt="DidITire Logo">
+</div>
 
 You can use the [editor on GitHub](https://github.com/richeyphu/MyWarehouse-Project/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
