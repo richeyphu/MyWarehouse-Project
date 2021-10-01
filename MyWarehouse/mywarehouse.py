@@ -218,6 +218,8 @@ class Ui_frm_mywh(object):
         self.tbl_items.resizeColumnsToContents()
         self.tbl_items.resizeRowsToContents()
         self.tbl_items.sortItems(self.tbl_sort_column, self.tbl_sort_order)
+        self.tbl_items.setColumnWidth(0, 60)
+        self.tbl_items.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
 
     def updaterow(self, prod_id: str):
         for i in range(self.tbl_items.rowCount()):
