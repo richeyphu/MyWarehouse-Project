@@ -13,6 +13,8 @@ class WhTableWidget(QtWidgets.QTableWidget):
         super(WhTableWidget, self).__init__(parent=parent)
         # super().setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers) # Move to individual item
         # super().horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.tbl_items.setColumnWidth(0, 60)
+        self.tbl_items.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
 
 
 class WhVerticalScrollbar(QtWidgets.QScrollBar):
