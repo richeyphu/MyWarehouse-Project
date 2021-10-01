@@ -52,4 +52,8 @@ $ repo sync
 <img width="400" height="400" src="docs/img/DidITire-1.png" alt="DidITire Logo">
 </div>
 
+
 >*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*
+
+
+![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
