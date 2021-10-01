@@ -33,10 +33,10 @@ $ repo sync
 
 
 ## Development Tools
-* **IDE :** [`PyCharm Professional 2021.2`](https://www.jetbrains.com/pycharm/)
-* **Interpreter :** [`Python 3.9`](https://www.python.org/downloads/release/python-390/)
-* **GUI Framework :** [`PyQt5`](https://pypi.org/project/PyQt5/)+[`Qt Designer`](https://build-system.fman.io/qt-designer-download)
-* **DBMS :** [`SQLite3`](https://www.sqlite.org/)
+- **IDE :** [`PyCharm Professional 2021.2`](https://www.jetbrains.com/pycharm/)
+- **Interpreter :** [`Python 3.9`](https://www.python.org/downloads/release/python-390/)
+- **GUI Framework :** [`PyQt5`](https://pypi.org/project/PyQt5/)+[`Qt Designer`](https://build-system.fman.io/qt-designer-download)
+- **DBMS :** [`SQLite3`](https://www.sqlite.org/)
 
 ## Usage
 1. Insert
@@ -49,6 +49,8 @@ $ repo sync
 <div align="center">
 <img width="400" height="400" src="img/DidITire-1.png" alt="DidITire Logo">
 </div>
+
+**Contact us :** support@diditire.house <!-- just a placeholder :3 -->
 
 
 
