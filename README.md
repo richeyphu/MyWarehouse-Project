@@ -1,7 +1,7 @@
 # MyWarehouse-Project
 
 <div align="center">
-<img width="400" height="400" src="docs/logo/MyWarehouse-2.png" alt="My Warehouse Logo">
+<img width="400" height="400" src="docs/img/MyWarehouse-2.png" alt="My Warehouse Logo">
 </div>
 
 **My Warehouse** is a simple warehouse management software.  
@@ -49,7 +49,7 @@ $ repo sync
 
 ## Development Team
 <div align="center">
-<img width="400" height="400" src="docs/logo/DidITire-1.png" alt="DidITire Logo">
+<img width="400" height="400" src="docs/img/DidITire-1.png" alt="DidITire Logo">
 </div>
 
 >*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*

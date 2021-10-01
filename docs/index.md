@@ -1,5 +1,5 @@
 <div align="center">
-<img width="400" height="400" src="logo/MyWarehouse-2.png" alt="My Warehouse Logo">
+<img width="400" height="400" src="img/MyWarehouse-2.png" alt="My Warehouse Logo">
 </div>
 
 ## About
@@ -47,7 +47,7 @@ $ repo sync
 
 ## Developed by
 <div align="center">
-<img width="400" height="400" src="logo/DidITire-1.png" alt="DidITire Logo">
+<img width="400" height="400" src="img/DidITire-1.png" alt="DidITire Logo">
 </div>
 
 
