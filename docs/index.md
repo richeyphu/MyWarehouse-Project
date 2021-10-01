@@ -10,7 +10,7 @@
 
 ## Developed by
 <div align="center">
-<img width="400" height="400" src="logo/MyWarehouse-2.png" alt="DidITire Logo">
+<img width="400" height="400" src="logo/DidITire-1.png" alt="DidITire Logo">
 </div>
 
 You can use the [editor on GitHub](https://github.com/richeyphu/MyWarehouse-Project/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
