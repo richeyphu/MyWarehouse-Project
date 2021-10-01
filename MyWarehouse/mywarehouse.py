@@ -143,22 +143,27 @@ class Ui_frm_mywh(object):
         self.btn_edit.setEnabled(False)
         self.searchDB()
         self.btn_search.clicked.connect(self.searchDB)
-        # self.btn_save.clicked.connect(self.save)
-        # self.btn_insert.clicked.connect(self.cellInsert)
+        self.btn_save.clicked.connect(self.saveUpdate)
+        self.btn_insert.clicked.connect(self.cellInsert)
 
     def clear_table(self):
         for i in range(self.tbl_items.rowCount()):
             self.tbl_items.removeRow(1)
 
-    def save(self):
-        if not self.btn_insert.isEnabled():
-            self.btn_insert.setEnabled(True)
+    def saveUpdate(self):
         if self.btn_save.isEnabled():
             # Save stuff
             self.btn_save.setEnabled(False)
 
+    def saveInsert(self, x):
+        self.btn_insert.setEnabled(True)
+
+        c2 = self.tbl_items.item(0, 2)
+        c3 = self.tbl_items.item(0, 3)
+        c4 = self.tbl_items.item(0, 4)
+        c5 = self.tbl_items.item(0, 5)
+
     def cellInsert(self):
-        self.tbl_items.insertRow(0)
         self.btn_insert.setEnabled(False)
         self.btn_save.setEnabled(True)
         with sqlite3.connect(self.dbpath) as conn:
@@ -170,6 +175,18 @@ class Ui_frm_mywh(object):
                             LIMIT 1;
                             """
             result = conn.execute(sql_command).fetchall()
+        n_id = result[0]["prod_id"] + 1
+        self.tbl_items.insertRow(0)
+
+        tempbtn = Wl.WhButton(n_id, self.tbl_items)
+        tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert(x))
+        self.afterRetranslateUi(tempbtn, "Save")
+        c1 = self.tbl_items.setItem(0, 1, tempbtn)
+        c2 = self.tbl_items.setItem(0, 2, QtWidgets.QTableWidgetItem(""))
+        c3 = self.tbl_items.setItem(0, 3, tempbtn)
+        c4 = self.tbl_items.setItem(0, 4, tempbtn)
+        c5 = self.tbl_items.setItem(0, 5, tempbtn)
+        c6 = self.tbl_items.setItem(0, 6, tempbtn)
 
     def searchDB(self):
         self.clear_table()
