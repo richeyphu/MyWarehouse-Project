@@ -183,6 +183,7 @@ class Ui_frm_mywh(object):
                             """.format(search_text)
             result = conn.execute(sql_command).fetchall()
         self.tbl_items.setRowCount(len(result))
+        self.lbl_found.setText("พบ {} รายการ".format(len(result)))
         row = 0
         for i in result:
             tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
