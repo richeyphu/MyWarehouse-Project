@@ -2,7 +2,7 @@
 <img width="400" height="400" src="logo/MyWarehouse-2.png" alt="My Warehouse Logo">
 </div>
 
-# My Warehouse
+## About
 **My Warehouse** is a simple warehouse management software.  
 > :heavy_check_mark: Very lightweight and easy to use  
 > :heavy_check_mark: Easily select, insert, update and delete data with GUI  
