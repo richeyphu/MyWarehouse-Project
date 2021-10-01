@@ -3,6 +3,7 @@
 </div>
 
 ## About
+---
 **My Warehouse** is a simple warehouse management software.  
 > ✔️ Very lightweight and easy to use  
 > ✔️ Easily select, insert, update and delete data with GUI  
@@ -10,6 +11,7 @@
 
 
 ## Installation
+---
 ### Git Clone
 ```bash 
 $ git clone https://github.com/richeyphu/MyWarehouse-Project.git
@@ -27,20 +29,24 @@ $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 
 
 ## Development Tools
+---
 - **IDE :** [`PyCharm Professional 2021.2`](https://www.jetbrains.com/pycharm/)
 - **Interpreter :** [`Python 3.9`](https://www.python.org/downloads/release/python-390/)
 - **GUI Framework :** [`PyQt5`](https://pypi.org/project/PyQt5/)+[`Qt Designer`](https://build-system.fman.io/qt-designer-download)
 - **DBMS :** [`SQLite3`](https://www.sqlite.org/)
 
+
 ## Usage
+---
 1. Insert
 2. Update
 3. Delete
 4. Commit
 5. Export
 
----
+
 ## Developed by
+---
 <div align="center">
 <img width="400" height="400" src="img/DidITire-1.png" alt="DidITire Logo">
 </div>
