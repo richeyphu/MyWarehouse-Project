@@ -137,6 +137,8 @@ class Ui_frm_mywh(object):
         frm_mywh.setTabOrder(self.btn_save, self.btn_export)
 
         # Event-Driven
+        self.tbl_sort_column: int = 1
+        self.tbl_sort_order: int = QtCore.Qt.AscendingOrder
         self.btn_save.setEnabled(False)
         self.btn_edit.setEnabled(False)
         self.searchDB()
@@ -215,6 +217,7 @@ class Ui_frm_mywh(object):
             row += 1
         self.tbl_items.resizeColumnsToContents()
         self.tbl_items.resizeRowsToContents()
+        self.tbl_items.sortItems(self.tbl_sort_column, self.tbl_sort_order)
 
     def updaterow(self, prod_id: str):
         for i in range(self.tbl_items.rowCount()):
