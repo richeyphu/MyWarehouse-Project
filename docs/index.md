@@ -2,17 +2,57 @@
 <img width="400" height="400" src="logo/MyWarehouse-2.png" alt="My Warehouse Logo">
 </div>
 
-## My Warehouse
+# My Warehouse
 **My Warehouse** is a simple warehouse management software.  
 > :heavy_check_mark: Very lightweight and easy to use  
 > :heavy_check_mark: Easily select, insert, update and delete data with GUI  
 > :heavy_check_mark: Supports exporting data to a CSV file  
+
+## Installation
+### Git Clone
+```bash 
+$ git clone https://github.com/richeyphu/MyWarehouse-Project.git
+```
+**Git Pull (git fetch + git merge)**
+```bash 
+$ git pull
+```
+***or***
+### Initialize Repository
+```bash
+$ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
+```
+**Sync Repository**
+```bash
+$ repo sync
+```
+### Required Packages
+- [`PyQt5`](https://pypi.org/project/PyQt5/)
+- [`PyQt5-stubs`](https://pypi.org/project/PyQt5-stubs/)
+- [`pyqt5-tools`](https://pypi.org/project/pyqt5-tools/)
+
+
+## Development Tools
+* **IDE :** [`PyCharm Professional 2021.2`](https://www.jetbrains.com/pycharm/)
+* **Interpreter :** [`Python 3.9`](https://www.python.org/downloads/release/python-390/)
+* **GUI Framework :** [`PyQt5`](https://pypi.org/project/PyQt5/)+[`Qt Designer`](https://build-system.fman.io/qt-designer-download)
+* **DBMS :** [`SQLite3`](https://www.sqlite.org/)
+
+## Usage
+1. Insert
+2. Update
+3. Delete
+4. Commit
+5. Export
 
 ## Developed by
 <div align="center">
 <img width="400" height="400" src="logo/DidITire-1.png" alt="DidITire Logo">
 </div>
 
+
+
+---
 You can use the [editor on GitHub](https://github.com/richeyphu/MyWarehouse-Project/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
