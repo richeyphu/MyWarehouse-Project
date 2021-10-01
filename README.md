@@ -2,7 +2,7 @@
 
 <p align="center">
 <img width="400" height="400" src="docs/logo/MyWarehouse-2.png" alt="My Warehouse Logo">
-</p>  
+</p>
 
 **My Warehouse** is a simple warehouse management software.  
 > :heavy_check_mark: Very lightweight and easy to use  
@@ -47,5 +47,9 @@ repo sync
 ## Docs
 - [MyWarehouse's Docs](https://richeyphu.github.io/MyWarehouse-Project/)
 
+## Development Team
+<p align="center">
+<img width="400" height="400" src="docs/logo/DidITire-1.png" alt="My Warehouse Logo">
+</p>
 
 >*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*
