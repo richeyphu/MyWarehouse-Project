@@ -177,16 +177,21 @@ class Ui_frm_mywh(object):
             result = conn.execute(sql_command).fetchall()
         n_id = result[0]["prod_id"] + 1
         self.tbl_items.insertRow(0)
-
         tempbtn = Wl.WhButton(n_id, self.tbl_items)
         tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert(x))
         self.afterRetranslateUi(tempbtn, "Save")
-        c1 = self.tbl_items.setItem(0, 1, tempbtn)
-        c2 = self.tbl_items.setItem(0, 2, QtWidgets.QTableWidgetItem(""))
-        c3 = self.tbl_items.setItem(0, 3, tempbtn)
-        c4 = self.tbl_items.setItem(0, 4, tempbtn)
-        c5 = self.tbl_items.setItem(0, 5, tempbtn)
-        c6 = self.tbl_items.setItem(0, 6, tempbtn)
+        self.tbl_items.setCellWidget(0, 0, tempbtn)
+        c2 = QtWidgets.QTableWidgetItem("{}".format(n_id))
+        c2.setFlags(c2.flags() & ~QtCore.Qt.ItemIsEditable)
+        c2.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+        self.tbl_items.setItem(0, 1, c2)
+        self.tbl_items.setItem(0, 2, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(0, 3, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(0, 4, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(0, 5, QtWidgets.QTableWidgetItem(""))
+        c6 = QtWidgets.QTableWidgetItem("")
+        c6.setFlags(c6.flags() & ~QtCore.Qt.ItemIsEditable)
+        self.tbl_items.setItem(0, 6, c6)
 
     def searchDB(self):
         self.clear_table()
@@ -194,12 +199,12 @@ class Ui_frm_mywh(object):
         with sqlite3.connect(self.dbpath) as conn:
             conn.row_factory = sqlite3.Row
             sql_command = """
-                            select * 
-                            from products
-                            where prod_id like '%{0}%'
-                            or prod_name like '%{0}%'
-                            or prod_desc like '%{0}%';
-                            """.format(search_text)
+                                select * 
+                                from products
+                                where prod_id like '%{0}%'
+                                or prod_name like '%{0}%'
+                                or prod_desc like '%{0}%';
+                                """.format(search_text)
             result = conn.execute(sql_command).fetchall()
         self.tbl_items.setRowCount(len(result))
         self.lbl_found.setText("พบ {} รายการ".format(len(result)))
