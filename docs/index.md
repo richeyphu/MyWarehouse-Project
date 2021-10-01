@@ -4,9 +4,9 @@
 
 ## About
 **My Warehouse** is a simple warehouse management software.  
-> :heavy_check_mark: Very lightweight and easy to use  
-> :heavy_check_mark: Easily select, insert, update and delete data with GUI  
-> :heavy_check_mark: Supports exporting data to a CSV file  
+> ✔️ Very lightweight and easy to use  
+> ✔️ Easily select, insert, update and delete data with GUI  
+> ✔️ Supports exporting data to a CSV file  
 
 ## Installation
 ### Git Clone
