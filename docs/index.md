@@ -8,24 +8,18 @@
 > ✔️ Easily select, insert, update and delete data with GUI  
 > ✔️ Supports exporting data to a CSV file  
 
+
 ## Installation
 ### Git Clone
 ```bash 
 $ git clone https://github.com/richeyphu/MyWarehouse-Project.git
-```
-**Git Pull (git fetch + git merge)**
-```bash 
-$ git pull
 ```
 ***or***
 ### Initialize Repository
 ```bash
 $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ```
-**Sync Repository**
-```bash
-$ repo sync
-```
+
 ### Required Packages
 - [`PyQt5`](https://pypi.org/project/PyQt5/)
 - [`PyQt5-stubs`](https://pypi.org/project/PyQt5-stubs/)
