@@ -50,7 +50,7 @@ $ repo sync
 <img width="400" height="400" src="img/DidITire-1.png" alt="DidITire Logo">
 </div>
 
-**Contact us :** support@diditire.house <!-- just a placeholder :3 -->
+[**Contact us**](mailto:support@diditire.house) <!-- just a placeholder :3 -->
 
 
 
