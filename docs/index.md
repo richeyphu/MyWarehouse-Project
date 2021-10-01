@@ -1,5 +1,5 @@
 <div align="center">
-<img width="400" height="400" src="img/MyWarehouse-2.png" alt="My Warehouse Logo">
+<img width="500" height="500" src="img/MyWarehouse-2.png" alt="My Warehouse Logo">
 </div>
 
 ## About
