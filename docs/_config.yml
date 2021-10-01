@@ -3,3 +3,6 @@ description: A simple warehouse management software
 show_downloads: true
 google_analytics:
 theme: jekyll-theme-cayman
+plugins:
+   - jekyll-seo-tag
+   
