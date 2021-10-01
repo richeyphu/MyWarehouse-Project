@@ -14,20 +14,20 @@
 
 ### Git Clone
 ```bash 
-git clone https://github.com/richeyphu/MyWarehouse-Project.git
+$ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
 **Git Pull (git fetch + git merge)**
 ```bash 
-git pull
+$ git pull
 ```
 ***or***
 ### Initialize Repository
 ```bash
-repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
+$ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ```
 **Sync Repository**
 ```bash
-repo sync
+$ repo sync
 ```
 
 
