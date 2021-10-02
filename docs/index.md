@@ -12,11 +12,14 @@
 
 ## Installation
 ---
+### Download
+- [MyWarehouse-Project.zip](https://github.com/richeyphu/MyWarehouse-Project/zipball/main)
+
 ### Git Clone
 ```bash 
 $ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
-***or***
+
 ### Initialize Repository
 ```bash
 $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
