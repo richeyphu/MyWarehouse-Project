@@ -44,7 +44,7 @@ $ repo sync
 * **DBMS :** [`SQLite3`](https://www.sqlite.org/)
 
 
-## Docs
+## Documentation
 - [MyWarehouse's Docs](https://richeyphu.github.io/MyWarehouse-Project/)
 
 ## Development Team
