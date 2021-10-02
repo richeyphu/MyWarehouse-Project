@@ -54,7 +54,7 @@ $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 [**Contact us**](mailto:support@diditire.house) <!-- just a placeholder :3 -->
 
 <sub><sup>
->*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*
+>*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*  
 </sup></sub>
 
 
