@@ -12,15 +12,16 @@
 
 ## Installation
 ---
-### Download
+### Method 1: Download
 - [MyWarehouse-Project.zip](https://github.com/richeyphu/MyWarehouse-Project/zipball/main)
+- [MyWarehouse-Project.tar.gz](https://github.com/richeyphu/MyWarehouse-Project/tarball/main)
 
-### Git Clone
+### Method 2: Git Clone
 ```bash 
 $ git clone https://github.com/richeyphu/MyWarehouse-Project.git
 ```
 
-### Initialize Repository
+### Method 3: Initialize Repository
 ```bash
 $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ```
