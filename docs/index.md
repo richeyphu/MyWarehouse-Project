@@ -1,5 +1,5 @@
 <div align="center">
-<img width="500" height="500" src="img/MyWarehouse-2.png" alt="My Warehouse Logo">
+<img width="500" height="500" src="img/MyWarehouse-2.png" alt="My Warehouse Logo" class="res-img">
 </div>
 
 ## About
@@ -48,13 +48,23 @@ $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ## Developed by
 ---
 <div align="center">
-<img width="400" height="400" src="img/DidITire-1.png" alt="DidITire Logo">
+<img width="400" height="400" src="img/DidITire-1.png" alt="DidITire Logo" class="res-img">
 </div>
 
 [**Contact us**](mailto:support@diditire.house) <!-- just a placeholder :3 -->
 
 >*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*
 
+
+<!-- CSS starts here -->
+<style>
+.res-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}
+</style>
+<!-- CSS ends here -->
 
 <!-----------
 
