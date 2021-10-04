@@ -361,6 +361,7 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
     frm_mywh = QtWidgets.QWidget()
+    app.setWindowIcon(QtGui.QIcon("icon.ico"))
     ui = Ui_frm_mywh()
     ui.setupUi(frm_mywh)
     frm_mywh.show()
