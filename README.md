@@ -56,4 +56,4 @@ $ repo sync
 >*In partial fulfillment of the requirements for the course `INT-303: Software Engineering (1/2564)`*
 
 
-![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
