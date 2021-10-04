@@ -470,7 +470,7 @@ color: rgb(255, 255, 255);</string>
     </font>
    </property>
    <property name="text">
-    <string>Order</string>
+    <string>Order by</string>
    </property>
   </widget>
  </widget>
