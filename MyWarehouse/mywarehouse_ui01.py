@@ -195,17 +195,17 @@ class Ui_frm_mywh(object):
 
     def searchDB(self):
         self.clear_table()
-        search_text = self.txt_search.text()
+        search_text = '%' + self.txt_search.text() + '%'
         with sqlite3.connect(self.dbpath) as conn:
             conn.row_factory = sqlite3.Row
             sql_command = """
                                 select * 
                                 from products
-                                where prod_id like '%{0}%'
-                                or prod_name like '%{0}%'
-                                or prod_desc like '%{0}%';
-                                """.format(search_text)
-            result = conn.execute(sql_command).fetchall()
+                                where prod_id like ?
+                                or prod_name like ?
+                                or prod_desc like ?;
+                                """
+            result = conn.execute(sql_command, [search_text, search_text, search_text]).fetchall()
         self.tbl_items.setRowCount(len(result))
         self.lbl_found.setText("พบ {} รายการ".format(len(result)))
         row = 0
@@ -273,7 +273,8 @@ class Ui_frm_mywh(object):
 
     def nonesubmiterror(self):
         QtWidgets.QMessageBox.about(None, "None Submit Row Detect",
-                                    "Row: {} is still in update mode\nPlease, finish updating".format(self.row + 1))
+                                    "Row: {} is still in update mode\nOnly one row can be update at a time".format(
+                                        self.row + 1))
 
     def submitrow(self, row: int):
         response = QtWidgets.QMessageBox.question(None, "Submit Change",
