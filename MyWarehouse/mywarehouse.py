@@ -9,15 +9,21 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import WHLib as Wl
+import sqlite3
+import locale
+
+locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 
 class Ui_frm_mywh(object):
     def setupUi(self, frm_mywh):
+        self.dbpath = "mywh_db.sqlite3"
         frm_mywh.setObjectName("frm_mywh")
         frm_mywh.resize(1000, 770)
         frm_mywh.setMinimumSize(QtCore.QSize(1000, 770))
         frm_mywh.setMaximumSize(QtCore.QSize(1000, 770))
-        self.tbl_items = QtWidgets.QTableWidget(frm_mywh)
+        self.tbl_items = Wl.WhTableWidget(frm_mywh)
         self.tbl_items.setGeometry(QtCore.QRect(20, 153, 961, 561))
         font = QtGui.QFont()
         font.setFamily("Kanit Light")
@@ -95,7 +101,7 @@ class Ui_frm_mywh(object):
         font.setPointSize(30)
         self.lbl_header.setFont(font)
         self.lbl_header.setStyleSheet("background-color: rgb(0, 170, 255);\n"
-"color: rgb(255, 255, 255);")
+                                      "color: rgb(255, 255, 255);")
         self.lbl_header.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_header.setObjectName("lbl_header")
         self.lbl_credit = QtWidgets.QLabel(frm_mywh)
@@ -184,6 +190,200 @@ class Ui_frm_mywh(object):
         frm_mywh.setTabOrder(self.btn_insert, self.btn_save)
         frm_mywh.setTabOrder(self.btn_save, self.btn_export)
 
+        # Event-Driven
+        self.tbl_sort_column: int = 2
+        self.tbl_sort_order: int = QtCore.Qt.AscendingOrder
+        self.btn_save.setEnabled(False)
+        self.searchDB()
+        self.btn_search.clicked.connect(self.searchDB)
+        self.btn_save.clicked.connect(self.saveUpdate)
+        self.btn_insert.clicked.connect(self.cellInsert)
+
+    def clear_table(self):
+        for i in range(self.tbl_items.rowCount()):
+            self.tbl_items.removeRow(0)
+
+    def saveUpdate(self):
+        if self.btn_save.isEnabled():
+            # Save stuff
+            self.btn_save.setEnabled(False)
+
+    def saveInsert(self, x):
+        self.btn_insert.setEnabled(True)
+
+        c2 = self.tbl_items.item(0, 2)
+        c3 = self.tbl_items.item(0, 3)
+        c4 = self.tbl_items.item(0, 4)
+        c5 = self.tbl_items.item(0, 5)
+
+    def cellInsert(self):
+        self.btn_insert.setEnabled(False)
+        self.btn_save.setEnabled(True)
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                            select * 
+                            from products
+                            ORDER BY Prod_id DESC
+                            LIMIT 1;
+                            """
+            result = conn.execute(sql_command).fetchall()
+        n_id = result[0]["prod_id"] + 1
+        self.tbl_items.insertRow(0)
+        tempbtn = Wl.WhButton(n_id, self.tbl_items)
+        tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert(x))
+        self.afterRetranslateUi(tempbtn, "Save")
+        self.tbl_items.setCellWidget(0, 0, tempbtn)
+        c2 = QtWidgets.QTableWidgetItem("{}".format(n_id))
+        c2.setFlags(c2.flags() & ~QtCore.Qt.ItemIsEditable)
+        c2.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+        self.tbl_items.setItem(0, 1, c2)
+        self.tbl_items.setItem(0, 2, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(0, 3, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(0, 4, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(0, 5, QtWidgets.QTableWidgetItem(""))
+        c6 = QtWidgets.QTableWidgetItem("")
+        c6.setFlags(c6.flags() & ~QtCore.Qt.ItemIsEditable)
+        self.tbl_items.setItem(0, 6, c6)
+
+    def searchDB(self):
+        self.clear_table()
+        search_text = '%' + self.txt_search.text() + '%'
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                                select * 
+                                from products p join categories c 
+                                on p.cat_id = c.cat_id
+                                join vendors v 
+                                on p.vd_id = v.vd_id
+                                where prod_id like ?
+                                or prod_name like ?
+                                or prod_desc like ?;
+                                """
+            result = conn.execute(sql_command, [search_text, search_text, search_text]).fetchall()
+        self.tbl_items.setRowCount(len(result))
+        self.lbl_found.setText("พบ {} รายการ".format(len(result)))
+        row = 0
+        for i in result:
+            tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
+            tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.updaterow(x))
+            self.afterRetranslateUi(tempbtn, "Update")
+            self.tbl_items.setCellWidget(row, 0, tempbtn)  # Update Button Column
+            tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
+            tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.deleteRow(x))
+            self.afterRetranslateUi(tempbtn, "Delete")
+            self.tbl_items.setCellWidget(row, 1, tempbtn)  # Delete Button Column
+            item = QtWidgets.QTableWidgetItem(str(i["prod_id"]))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 2, item)  # Product ID Column
+            item = QtWidgets.QTableWidgetItem(i["prod_name"])
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.tbl_items.setItem(row, 3, item)  # Product Name Column
+            item = QtWidgets.QTableWidgetItem(i["prod_desc"])
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.tbl_items.setItem(row, 4, item)  # Product Description Column
+            item = QtWidgets.QTableWidgetItem("{:,.2f}".format(i["prod_price"]))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 5, item)  # Product Price Column
+            item = QtWidgets.QTableWidgetItem("{:,.0f}".format(i["prod_qty"]))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.tbl_items.setItem(row, 6, item)  # Product Quantity Column
+            item = QtWidgets.QTableWidgetItem("{:,.2f}฿".format(float(i["prod_price"]) * float(i["prod_qty"])))
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 7, item)  # Total Product Value Column
+            item = QtWidgets.QTableWidgetItem(i["cat_name"])
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.tbl_items.setItem(row, 8, item)  # Product Quantity Column
+            item = QtWidgets.QTableWidgetItem(i["vd_name"])
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.tbl_items.setItem(row, 9, item)  # Product Quantity Column
+            row += 1
+        self.tbl_items.resizeColumnsToContents()
+        self.tbl_items.resizeRowsToContents()
+        self.tbl_items.sortItems(self.tbl_sort_column, self.tbl_sort_order)
+        self.tbl_items.setColumnWidth(0, 60)
+        self.tbl_items.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+
+    def updaterow(self, prod_id: str):
+        for i in range(self.tbl_items.rowCount()):
+            if self.tbl_items.item(i, 1).text() == str(prod_id):
+                self.row = i
+            btn = self.tbl_items.cellWidget(i, 0)
+            btn.disconnect()
+            btn.clicked.connect(self.nonesubmiterror)
+        c0 = self.tbl_items.cellWidget(self.row, 0)
+        self.afterRetranslateUi(c0, "Submit")
+        c0.disconnect()
+        c0.clicked.connect(lambda state, x=self.row: self.submitrow(x))
+        font = QtGui.QFont()
+        font.setFamily("Kanit Light")
+        font.setBold(True)
+        font.setPointSize(12)
+        c1 = self.tbl_items.item(self.row, 1)
+        c1.setFont(font)
+        c2 = self.tbl_items.item(self.row, 2)
+        c2.setFlags(c2.flags() | QtCore.Qt.ItemIsEditable)
+        c3 = self.tbl_items.item(self.row, 3)
+        c3.setFlags(c3.flags() | QtCore.Qt.ItemIsEditable)
+        c4 = self.tbl_items.item(self.row, 4)
+        c4.setFlags(c4.flags() | QtCore.Qt.ItemIsEditable)
+        c5 = self.tbl_items.item(self.row, 5)
+        c5.setFlags(c5.flags() | QtCore.Qt.ItemIsEditable)
+        c6 = self.tbl_items.item(self.row, 6)
+        c6.setFont(font)
+
+    def deleteRow(self):
+        pass
+
+    def nonesubmiterror(self):
+        QtWidgets.QMessageBox.about(None, "None Submit Row Detect",
+                                    "Row: {} is still in update mode\nOnly one row can be update at a time".format(
+                                        self.row + 1))
+
+    def submitrow(self, row: int):
+        response = QtWidgets.QMessageBox.question(None, "Submit Change",
+                                                  "Change on row {}. Are you sure?".format(row + 1),
+                                                  QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        if response == QtWidgets.QMessageBox.Yes:
+            for i in range(self.tbl_items.rowCount()):
+                btn = self.tbl_items.cellWidget(i, 0)
+                btn.disconnect()
+                btn.clicked.connect(lambda state, x=btn.id: self.updaterow(x))
+                self.afterRetranslateUi(btn, "Update")
+            font = QtGui.QFont()
+            font.setFamily("Kanit Light")
+            font.setBold(False)
+            font.setPointSize(12)
+            c1 = self.tbl_items.item(row, 1)
+            c1.setFont(font)
+            c2 = self.tbl_items.item(row, 2)
+            c2.setFlags(c2.flags() & ~QtCore.Qt.ItemIsEditable)
+            c3 = self.tbl_items.item(row, 3)
+            c3.setFlags(c3.flags() & ~QtCore.Qt.ItemIsEditable)
+            c4 = self.tbl_items.item(row, 4)
+            c4.setFlags(c4.flags() & ~QtCore.Qt.ItemIsEditable)
+            c5 = self.tbl_items.item(row, 5)
+            c5.setFlags(c5.flags() & ~QtCore.Qt.ItemIsEditable)
+            c6 = QtWidgets.QTableWidgetItem(
+                "{:,.2f}฿".format(locale.atof(c4.text()) * locale.atof(c5.text())))
+            c6.setFont(font)
+            c6.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            self.tbl_items.setItem(row, 6, c6)
+            self.btn_save.setEnabled(True)
+            self.tbl_items.resizeColumnsToContents()
+            self.tbl_items.resizeRowsToContents()
+
+    def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
+        _translate = QtCore.QCoreApplication.translate
+        btn.setText(_translate("frm_mywh", text))
+
     def retranslateUi(self, frm_mywh):
         _translate = QtCore.QCoreApplication.translate
         frm_mywh.setWindowTitle(_translate("frm_mywh", "My Warehouse"))
@@ -223,7 +423,8 @@ class Ui_frm_mywh(object):
         self.txt_search.setToolTip(_translate("frm_mywh", "<html><head/><body><p>ค้นหาสินค้า</p></body></html>"))
         self.btn_search.setToolTip(_translate("frm_mywh", "<html><head/><body><p>ค้นหา</p></body></html>"))
         self.btn_search.setText(_translate("frm_mywh", "Search"))
-        self.btn_export.setToolTip(_translate("frm_mywh", "<html><head/><body><p>ส่งออกรายการสินค้าเป็นไฟล์ CSV</p></body></html>"))
+        self.btn_export.setToolTip(
+            _translate("frm_mywh", "<html><head/><body><p>ส่งออกรายการสินค้าเป็นไฟล์ CSV</p></body></html>"))
         self.btn_export.setText(_translate("frm_mywh", "Export"))
         self.btn_save.setText(_translate("frm_mywh", "Save"))
         self.lbl_header.setText(_translate("frm_mywh", "My Warehouse"))
@@ -255,7 +456,9 @@ class Ui_frm_mywh(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon("icon.ico"))
     frm_mywh = QtWidgets.QWidget()
     ui = Ui_frm_mywh()
     ui.setupUi(frm_mywh)
