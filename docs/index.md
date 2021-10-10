@@ -32,14 +32,6 @@ $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 - [`pyqt5-tools`](https://pypi.org/project/pyqt5-tools/)
 
 
-## Development Tools
----
-- **IDE :** [`PyCharm Professional 2021.2`](https://www.jetbrains.com/pycharm/)
-- **Interpreter :** [`Python 3.9`](https://www.python.org/downloads/release/python-390/)
-- **GUI Framework :** [`PyQt5`](https://pypi.org/project/PyQt5/)+[`Qt Designer`](https://build-system.fman.io/qt-designer-download)
-- **DBMS :** [`SQLite3`](https://www.sqlite.org/)
-
-
 ## Usage
 ---
 ### Runs
@@ -52,6 +44,14 @@ $ python3 mywarehouse.py
 3. Delete
 4. Commit
 5. Export
+
+
+## Development Tools
+---
+- **IDE :** [`PyCharm Professional 2021.2`](https://www.jetbrains.com/pycharm/)
+- **Interpreter :** [`Python 3.9`](https://www.python.org/downloads/release/python-390/)
+- **GUI Framework :** [`PyQt5`](https://pypi.org/project/PyQt5/)+[`Qt Designer`](https://build-system.fman.io/qt-designer-download)
+- **DBMS :** [`SQLite3`](https://www.sqlite.org/)
 
 
 ## Developed by
