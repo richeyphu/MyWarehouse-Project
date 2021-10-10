@@ -42,6 +42,11 @@ $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 
 ## Usage
 ---
+### Runs
+```bash
+$ python3 mywarehouse.py
+```
+### Functions
 1. Insert
 2. Update
 3. Delete
