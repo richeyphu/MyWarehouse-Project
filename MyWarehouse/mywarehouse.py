@@ -182,6 +182,9 @@ class Ui_frm_mywh(object):
         self.lbl_found_4.setFont(font)
         self.lbl_found_4.setObjectName("lbl_found_4")
 
+        self.btn_insert.setGeometry(self.btn_save.geometry())
+        self.btn_save.setVisible(False)
+
         self.retranslateUi(frm_mywh)
         QtCore.QMetaObject.connectSlotsByName(frm_mywh)
         frm_mywh.setTabOrder(self.txt_search, self.btn_search)
@@ -190,13 +193,12 @@ class Ui_frm_mywh(object):
         frm_mywh.setTabOrder(self.btn_insert, self.btn_save)
         frm_mywh.setTabOrder(self.btn_save, self.btn_export)
 
+
         # Event-Driven
         self.tbl_sort_column: int = 2
         self.tbl_sort_order: int = QtCore.Qt.AscendingOrder
-        self.btn_save.setEnabled(False)
         self.searchDB()
         self.btn_search.clicked.connect(self.searchDB)
-        self.btn_save.clicked.connect(self.saveUpdate)
         self.btn_insert.clicked.connect(self.cellInsert)
 
     def clear_table(self):
