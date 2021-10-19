@@ -705,4 +705,4 @@ if __name__ == "__main__":
     ui = Ui_frm_mywh()
     ui.setupUi(frm_mywh)
     frm_mywh.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
