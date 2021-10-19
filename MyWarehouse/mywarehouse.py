@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import WHLib as Wl
 import sqlite3
 import locale
+from datetime import datetime
 
 locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
@@ -193,7 +194,6 @@ class Ui_frm_mywh(object):
         frm_mywh.setTabOrder(self.btn_insert, self.btn_save)
         frm_mywh.setTabOrder(self.btn_save, self.btn_export)
 
-
         # Event-Driven
         self.tbl_sort_column: int = 2
         self.tbl_sort_order: int = QtCore.Qt.AscendingOrder
@@ -205,11 +205,7 @@ class Ui_frm_mywh(object):
         for i in range(self.tbl_items.rowCount()):
             self.tbl_items.removeRow(0)
 
-    def saveUpdate(self):
-        if self.btn_save.isEnabled():
-            # Save stuff
-            self.btn_save.setEnabled(False)
-
+    # Insert into database
     def saveInsert(self, x):
         self.btn_insert.setEnabled(True)
 
@@ -218,6 +214,7 @@ class Ui_frm_mywh(object):
         c4 = self.tbl_items.item(0, 4)
         c5 = self.tbl_items.item(0, 5)
 
+    # Insert into table
     def cellInsert(self):
         self.btn_insert.setEnabled(False)
         self.btn_save.setEnabled(True)
@@ -248,7 +245,10 @@ class Ui_frm_mywh(object):
         c6.setFlags(c6.flags() & ~QtCore.Qt.ItemIsEditable)
         self.tbl_items.setItem(0, 6, c6)
 
+    # Display data
     def searchDB(self):
+        self.btn_search.setEnabled(True)
+        self.txt_search.setEnabled(True)
         self.clear_table()
         search_text = '%' + self.txt_search.text() + '%'
         with sqlite3.connect(self.dbpath) as conn:
@@ -301,11 +301,11 @@ class Ui_frm_mywh(object):
             item = QtWidgets.QTableWidgetItem(i["cat_name"])
             item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
             item.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.tbl_items.setItem(row, 8, item)  # Product Quantity Column
+            self.tbl_items.setItem(row, 8, item)  # Product Catagory Column
             item = QtWidgets.QTableWidgetItem(i["vd_name"])
             item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
             item.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.tbl_items.setItem(row, 9, item)  # Product Quantity Column
+            self.tbl_items.setItem(row, 9, item)  # Product Vendor Column
             row += 1
         self.tbl_items.resizeColumnsToContents()
         self.tbl_items.resizeRowsToContents()
@@ -314,74 +314,131 @@ class Ui_frm_mywh(object):
         self.tbl_items.setColumnWidth(1, 60)
         self.tbl_items.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
 
-    def updaterow(self, prod_id: str):
+    # Freeze search, allow edit
+    def updaterow(self, prod_id):
+        self.btn_search.setEnabled(False)
+        self.txt_search.setEnabled(False)
         for i in range(self.tbl_items.rowCount()):
-            if self.tbl_items.item(i, 1).text() == str(prod_id):
-                self.row = i
+            if self.tbl_items.item(i, 2).text() == str(prod_id):
+                self.selectedRow = i
             btn = self.tbl_items.cellWidget(i, 0)
             btn.disconnect()
             btn.clicked.connect(self.nonesubmiterror)
-        c0 = self.tbl_items.cellWidget(self.row, 0)
+        c0 = self.tbl_items.cellWidget(self.selectedRow, 0)
         self.afterRetranslateUi(c0, "Submit")
         c0.disconnect()
-        c0.clicked.connect(lambda state, x=self.row: self.submitrow(x))
+        c0.clicked.connect(lambda state, x=self.selectedRow: self.submitrow())
         font = QtGui.QFont()
         font.setFamily("Kanit Light")
         font.setBold(True)
         font.setPointSize(12)
-        c1 = self.tbl_items.item(self.row, 1)
-        c1.setFont(font)
-        c2 = self.tbl_items.item(self.row, 2)
-        c2.setFlags(c2.flags() | QtCore.Qt.ItemIsEditable)
-        c3 = self.tbl_items.item(self.row, 3)
+        c2 = self.tbl_items.item(self.selectedRow, 2)
+        c2.setFont(font)
+        c3 = self.tbl_items.item(self.selectedRow, 3)
         c3.setFlags(c3.flags() | QtCore.Qt.ItemIsEditable)
-        c4 = self.tbl_items.item(self.row, 4)
+        c4 = self.tbl_items.item(self.selectedRow, 4)
         c4.setFlags(c4.flags() | QtCore.Qt.ItemIsEditable)
-        c5 = self.tbl_items.item(self.row, 5)
+        c5 = self.tbl_items.item(self.selectedRow, 5)
         c5.setFlags(c5.flags() | QtCore.Qt.ItemIsEditable)
-        c6 = self.tbl_items.item(self.row, 6)
-        c6.setFont(font)
+        c6 = self.tbl_items.item(self.selectedRow, 6)
+        c6.setFlags(c6.flags() | QtCore.Qt.ItemIsEditable)
+        c7 = self.tbl_items.item(self.selectedRow, 7)
+        c7.setFont(font)
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                                select * 
+                                from categories;
+                                """
+            result = conn.execute(sql_command).fetchall()
+        cbx_cat = QtWidgets.QComboBox(self.tbl_items)
+        for i in result:
+            cbx_cat.addItem(i["cat_name"], i["cat_id"])
+        cbx_cat.view().setMinimumWidth(cbx_cat.minimumSizeHint().width())
+        c8 = self.tbl_items.item(self.selectedRow, 8)
+        index = cbx_cat.findText(c8.text())
+        cbx_cat.setCurrentIndex(index)
+        c8.setText("")
+        self.tbl_items.setCellWidget(self.selectedRow, 8, cbx_cat)
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                                select * 
+                                from vendors;
+                                """
+            result = conn.execute(sql_command).fetchall()
+        cbx_cat = QtWidgets.QComboBox(self.tbl_items)
+        for i in result:
+            cbx_cat.addItem(i["vd_name"], i["vd_id"])
+        cbx_cat.view().setMinimumWidth(cbx_cat.minimumSizeHint().width())
+        c9 = self.tbl_items.item(self.selectedRow, 9)
+        index = cbx_cat.findText(c9.text())
+        cbx_cat.setCurrentIndex(index)
+        c9.setText("")
+        self.tbl_items.setCellWidget(self.selectedRow, 9, cbx_cat)
 
-    def deleteRow(self):
+    def deleteRow(self, prod_id):
         pass
 
     def nonesubmiterror(self):
         QtWidgets.QMessageBox.about(None, "None Submit Row Detect",
                                     "Row: {} is still in update mode\nOnly one row can be update at a time".format(
-                                        self.row + 1))
+                                        self.selectedRow + 1))
 
-    def submitrow(self, row: int):
+    def submitrow(self, ):
         response = QtWidgets.QMessageBox.question(None, "Submit Change",
-                                                  "Change on row {}. Are you sure?".format(row + 1),
+                                                  "Change on row {}. Are you sure?".format(self.selectedRow + 1),
                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if response == QtWidgets.QMessageBox.Yes:
-            for i in range(self.tbl_items.rowCount()):
-                btn = self.tbl_items.cellWidget(i, 0)
-                btn.disconnect()
-                btn.clicked.connect(lambda state, x=btn.id: self.updaterow(x))
-                self.afterRetranslateUi(btn, "Update")
-            font = QtGui.QFont()
-            font.setFamily("Kanit Light")
-            font.setBold(False)
-            font.setPointSize(12)
-            c1 = self.tbl_items.item(row, 1)
-            c1.setFont(font)
-            c2 = self.tbl_items.item(row, 2)
-            c2.setFlags(c2.flags() & ~QtCore.Qt.ItemIsEditable)
-            c3 = self.tbl_items.item(row, 3)
-            c3.setFlags(c3.flags() & ~QtCore.Qt.ItemIsEditable)
-            c4 = self.tbl_items.item(row, 4)
-            c4.setFlags(c4.flags() & ~QtCore.Qt.ItemIsEditable)
-            c5 = self.tbl_items.item(row, 5)
-            c5.setFlags(c5.flags() & ~QtCore.Qt.ItemIsEditable)
-            c6 = QtWidgets.QTableWidgetItem(
-                "{:,.2f}฿".format(locale.atof(c4.text()) * locale.atof(c5.text())))
-            c6.setFont(font)
-            c6.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-            self.tbl_items.setItem(row, 6, c6)
-            self.btn_save.setEnabled(True)
-            self.tbl_items.resizeColumnsToContents()
-            self.tbl_items.resizeRowsToContents()
+            c2 = self.tbl_items.item(self.selectedRow, 2)  # Product ID
+            prod_id = c2.text()
+            c3 = self.tbl_items.item(self.selectedRow, 3)  # Product Name
+            prod_name = c3.text()
+            c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
+            prod_desc = c4.text()
+            c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
+            prod_upc = float(c5.text())
+            c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
+            prod_qty = int(c6.text())
+            c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
+            cat_id = c8.itemData(c8.currentIndex())
+            c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
+            vd_id = c9.itemData(c9.currentIndex())
+            query_data = [prod_name, prod_desc, prod_upc, prod_qty, cat_id, vd_id, datetime.now(), prod_id]
+            sql_command = """
+                            Update Products
+                            set prod_name = ?, prod_desc = ?, prod_price = ?, prod_qty = ?, cat_id = ?, vd_id = ?, last_modified = ?
+                            where prod_id = ?;
+                            """
+            with sqlite3.connect(self.dbpath) as conn:
+                conn.execute(sql_command, query_data)
+            self.searchDB()
+            # for i in range(self.tbl_items.rowCount()):
+            #     btn = self.tbl_items.cellWidget(i, 0)
+            #     btn.disconnect()
+            #     btn.clicked.connect(lambda state, x=btn.id: self.updaterow(x))
+            #     self.afterRetranslateUi(btn, "Update")
+            # font = QtGui.QFont()
+            # font.setFamily("Kanit Light")
+            # font.setBold(False)
+            # font.setPointSize(12)
+            # c2 = self.tbl_items.item(row, 1)
+            # c2.setFont(font)
+            # c3 = self.tbl_items.item(row, 2)
+            # c3.setFlags(c3.flags() & ~QtCore.Qt.ItemIsEditable)
+            # c4 = self.tbl_items.item(row, 3)
+            # c4.setFlags(c4.flags() & ~QtCore.Qt.ItemIsEditable)
+            # c5 = self.tbl_items.item(row, 4)
+            # c5.setFlags(c5.flags() & ~QtCore.Qt.ItemIsEditable)
+            # c6 = self.tbl_items.item(row, 5)
+            # c6.setFlags(c6.flags() & ~QtCore.Qt.ItemIsEditable)
+            # c7 = QtWidgets.QTableWidgetItem(
+            #     "{:,.2f}฿".format(locale.atof(c5.text()) * locale.atof(c6.text())))
+            # c7.setFont(font)
+            # c7.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+            # self.tbl_items.setItem(row, 6, c7)
+            # self.tbl_items.resizeColumnsToContents()
+            # self.tbl_items.resizeRowsToContents()
 
     def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
         _translate = QtCore.QCoreApplication.translate
