@@ -285,24 +285,20 @@ class Ui_frm_mywh(object):
         self.tbl_items.setItem(0, 6, c6)
 
     def search_cat(self, cat):
-        if hasattr(self, "s_cat"):
-            if self.s_cat == "Show All":
-                return True
-            if self.s_cat == cat:
-                print(1)
-                return True
-            return False
-        return True
+        if self.s_cat == "Show All":
+            return True
+        if self.s_cat == cat:
+            print(1)
+            return True
+        return False
 
     def search_vd(self, vd):
-        if hasattr(self, "s_vd"):
-            if self.s_vd == "Show All":
-                return True
-            if self.s_vd == vd:
-                print(2)
-                return True
-            return False
-        return True
+        if self.s_vd == "Show All":
+            return True
+        if self.s_vd == vd:
+            print(2)
+            return True
+        return False
 
     def setSearchOrder(self):
         # Set Vendor
