@@ -426,8 +426,6 @@ class Ui_frm_mywh(object):
         self.lbl_found.setText("พบ {} รายการ".format(row))
         self.tbl_items.resizeColumnsToContents()
         self.tbl_items.resizeRowsToContents()
-        sortFilderProxyModel = QtCore.QSortFilterProxyModel(self.tbl_items)
-
         self.tbl_items.sortItems(self.tbl_sort_column, self.tbl_sort_order)
         self.tbl_items.setColumnWidth(0, 60)
         self.tbl_items.setColumnWidth(1, 60)
