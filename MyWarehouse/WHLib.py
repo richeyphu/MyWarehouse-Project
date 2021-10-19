@@ -2,6 +2,13 @@
 from PyQt5 import QtWidgets, QtCore
 
 
+class WhFileDialog(QtWidgets.QFileDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        super().setViewMode(QtWidgets.QFileDialog.Detail)
+        super().setFileMode(QtWidgets.QFileDialog.ExistingFiles)
+
+
 class WhTableNumberItem(QtWidgets.QTableWidgetItem):
     def __init__(self, text: str):
         super(WhTableNumberItem, self).__init__(text)

@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import WHLib as Wl
 import sqlite3
 import locale
+import csv
 from datetime import datetime
 
 locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
@@ -20,6 +21,7 @@ locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 class Ui_frm_mywh(object):
     def setupUi(self, frm_mywh):
         self.dbpath = "mywh_db.sqlite3"
+        self.this = frm_mywh
         frm_mywh.setObjectName("frm_mywh")
         frm_mywh.resize(1000, 770)
         frm_mywh.setMinimumSize(QtCore.QSize(1000, 770))
@@ -199,6 +201,7 @@ class Ui_frm_mywh(object):
         self.searchDB()
         self.btn_search.clicked.connect(self.searchDB)
         self.btn_insert.clicked.connect(self.cellInsert)
+        self.btn_export.clicked.connect(self.exportAsCVS)
 
     def setupSearchOrder(self):
         with sqlite3.connect(self.dbpath) as conn:
@@ -250,8 +253,6 @@ class Ui_frm_mywh(object):
                                                   "Insert new data. Are you sure?".format(self.selectedRow + 1),
                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if response == QtWidgets.QMessageBox.Yes:
-            c2 = self.tbl_items.item(self.selectedRow, 2)  # Product ID
-            prod_id = c2.text()
             c3 = self.tbl_items.item(self.selectedRow, 3)  # Product Name
             prod_name = c3.text()
             c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
@@ -286,12 +287,12 @@ class Ui_frm_mywh(object):
         with sqlite3.connect(self.dbpath) as conn:
             conn.row_factory = sqlite3.Row
             sql_command = """
-                            select * 
-                            from products
-                            ORDER BY Prod_id DESC
-                            LIMIT 1;
+                            select *
+                            from sqlite_sequence
+                            where name = 'PRODUCTS';
                             """
-            n_id = conn.execute(sql_command).fetchall()[0]["prod_id"] + 1
+            n_id = int(conn.execute(sql_command).fetchall()[0]["seq"]) + 1
+        print("hi")
         self.tbl_items.insertRow(self.selectedRow)
         tempbtn = Wl.WhButton(n_id, self.tbl_items)
         tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert(x))
@@ -549,14 +550,42 @@ class Ui_frm_mywh(object):
         self.tbl_items.setCellWidget(self.selectedRow, 9, cbx_cat)
 
     def deleteRow(self, prod_id):
-        pass
+        response = QtWidgets.QMessageBox.question(None, "Delete Row",
+                                                  "Delete ID {}. Are you sure?".format(prod_id),
+                                                  QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        if response == QtWidgets.QMessageBox.Yes:
+            with sqlite3.connect(self.dbpath) as conn:
+                sql_command = """
+                                Delete From Products
+                                Where prod_id = ?;
+                                """
+                conn.execute(sql_command, [prod_id])
+                self.searchDB()
+
+    def exportAsCVS(self):
+        # fdl = Wl.WhFileDialog(self)
+        save = Wl.WhFileDialog(self.this).getSaveFileName(self.this, "Save File", "Untitled.csv")
+        if save[0]:
+            with open(file=save[0], mode="w", encoding="utf-8", newline="") as fn:
+                fcsv = csv.writer(fn, delimiter=",")
+                wd = []
+                header = ["Product_ID", "Product_Name", "Product_Description", "Product_Price", "Product_Quantity",
+                          "Total_Price", "Category_Name", "Vendor_Name"]
+                wd.append(header)
+                for i in range(self.tbl_items.rowCount()):
+                    data = [self.tbl_items.item(i, 2).text(), self.tbl_items.item(i, 3).text(),
+                            self.tbl_items.item(i, 4).text(), self.tbl_items.item(i, 5).text(),
+                            self.tbl_items.item(i, 6).text(), self.tbl_items.item(i, 7).text(),
+                            self.tbl_items.item(i, 8).text(), self.tbl_items.item(i, 9).text()]
+                    wd.append(data)
+                fcsv.writerows(wd)
 
     def nonesubmiterror(self):
         QtWidgets.QMessageBox.about(None, "None Submit Row Detect",
                                     "Row: {} is still in update mode\nOnly one row can be update at a time".format(
                                         self.selectedRow + 1))
 
-    def submitrow(self, ):
+    def submitrow(self):
         response = QtWidgets.QMessageBox.question(None, "Submit Change",
                                                   "Change on row {}. Are you sure?".format(self.selectedRow + 1),
                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
@@ -577,10 +606,10 @@ class Ui_frm_mywh(object):
             vd_id = c9.itemData(c9.currentIndex())
             query_data = [prod_name, prod_desc, prod_upc, prod_qty, cat_id, vd_id, datetime.now(), prod_id]
             sql_command = """
-                            Update Products
-                            set prod_name = ?, prod_desc = ?, prod_price = ?, prod_qty = ?, cat_id = ?, vd_id = ?, last_modified = ?
-                            where prod_id = ?;
-                            """
+                        Update Products
+                        set prod_name = ?, prod_desc = ?, prod_price = ?, prod_qty = ?, cat_id = ?, vd_id = ?, last_modified = ?
+                        where prod_id = ?;
+                        """
             with sqlite3.connect(self.dbpath) as conn:
                 conn.execute(sql_command, query_data)
             self.searchDB()
@@ -635,7 +664,8 @@ class Ui_frm_mywh(object):
         self.lbl_header.setText(_translate("frm_mywh", "My Warehouse"))
         self.lbl_credit.setText(_translate("frm_mywh", "Developed by DidITired House Co., Ltd."))
         self.lbl_found.setText(_translate("frm_mywh", "พบ {0} รายการ"))
-        self.btn_insert.setToolTip(_translate("frm_mywh", "<html><head/><body><p>เพิ่มรายการสินค้า</p></body></html>"))
+        self.btn_insert.setToolTip(
+            _translate("frm_mywh", "<html><head/><body><p>เพิ่มรายการสินค้า</p></body></html>"))
         self.btn_insert.setText(_translate("frm_mywh", "Insert"))
         self.cmb_order.setToolTip(_translate("frm_mywh", "<html><head/><body><p>จัดเรียงตาม</p></body></html>"))
         self.cmb_order.setItemText(0, _translate("frm_mywh", "ID ▲"))
