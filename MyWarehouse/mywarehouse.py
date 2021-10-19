@@ -246,17 +246,43 @@ class Ui_frm_mywh(object):
 
     # Insert into database
     def saveInsert(self, x):
-        self.btn_insert.setEnabled(True)
-
-        c2 = self.tbl_items.item(0, 2)
-        c3 = self.tbl_items.item(0, 3)
-        c4 = self.tbl_items.item(0, 4)
-        c5 = self.tbl_items.item(0, 5)
+        response = QtWidgets.QMessageBox.question(None, "Submit Insert",
+                                                  "Insert new data. Are you sure?".format(self.selectedRow + 1),
+                                                  QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        if response == QtWidgets.QMessageBox.Yes:
+            c2 = self.tbl_items.item(self.selectedRow, 2)  # Product ID
+            prod_id = c2.text()
+            c3 = self.tbl_items.item(self.selectedRow, 3)  # Product Name
+            prod_name = c3.text()
+            c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
+            prod_desc = c4.text()
+            c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
+            prod_upc = float(c5.text())
+            c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
+            prod_qty = int(c6.text())
+            c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
+            cat_id = c8.itemData(c8.currentIndex())
+            c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
+            vd_id = c9.itemData(c9.currentIndex())
+            query_data = [prod_name, prod_desc, prod_upc, prod_qty, cat_id, vd_id, datetime.now()]
+            column_name = "prod_name,prod_desc,prod_price,prod_qty,cat_id,vd_id,last_modified"
+            sql_command = """
+                            Insert into Products ({})
+                            Values (?,?,?,?,?,?,?);
+                            """.format(column_name)
+            with sqlite3.connect(self.dbpath) as conn:
+                conn.execute(sql_command, query_data)
+            self.searchDB()
 
     # Insert into table
     def cellInsert(self):
-        self.btn_insert.setEnabled(False)
-        self.btn_save.setEnabled(True)
+        self.disableChange()
+        self.selectedRow = 0
+        for i in range(self.tbl_items.rowCount()):
+            btn = self.tbl_items.cellWidget(i, 0)
+            btn.disconnect()
+            btn.clicked.connect(self.nonesubmiterror)
+            self.tbl_items.cellWidget(i, 1).setEnabled(False)
         with sqlite3.connect(self.dbpath) as conn:
             conn.row_factory = sqlite3.Row
             sql_command = """
@@ -265,9 +291,8 @@ class Ui_frm_mywh(object):
                             ORDER BY Prod_id DESC
                             LIMIT 1;
                             """
-            result = conn.execute(sql_command).fetchall()
-        n_id = result[0]["prod_id"] + 1
-        self.tbl_items.insertRow(0)
+            n_id = conn.execute(sql_command).fetchall()[0]["prod_id"] + 1
+        self.tbl_items.insertRow(self.selectedRow)
         tempbtn = Wl.WhButton(n_id, self.tbl_items)
         tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert(x))
         self.afterRetranslateUi(tempbtn, "Save")
@@ -275,14 +300,38 @@ class Ui_frm_mywh(object):
         c2 = QtWidgets.QTableWidgetItem("{}".format(n_id))
         c2.setFlags(c2.flags() & ~QtCore.Qt.ItemIsEditable)
         c2.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        self.tbl_items.setItem(0, 1, c2)
-        self.tbl_items.setItem(0, 2, QtWidgets.QTableWidgetItem(""))
-        self.tbl_items.setItem(0, 3, QtWidgets.QTableWidgetItem(""))
-        self.tbl_items.setItem(0, 4, QtWidgets.QTableWidgetItem(""))
-        self.tbl_items.setItem(0, 5, QtWidgets.QTableWidgetItem(""))
-        c6 = QtWidgets.QTableWidgetItem("")
-        c6.setFlags(c6.flags() & ~QtCore.Qt.ItemIsEditable)
-        self.tbl_items.setItem(0, 6, c6)
+        self.tbl_items.setItem(self.selectedRow, 2, c2)
+        self.tbl_items.setItem(self.selectedRow, 3, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(self.selectedRow, 4, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(self.selectedRow, 5, QtWidgets.QTableWidgetItem(""))
+        self.tbl_items.setItem(self.selectedRow, 6, QtWidgets.QTableWidgetItem(""))
+        c7 = QtWidgets.QTableWidgetItem("")
+        c7.setFlags(c7.flags() & ~QtCore.Qt.ItemIsEditable)
+        self.tbl_items.setItem(self.selectedRow, 7, c7)
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                                select * 
+                                from categories;
+                                """
+            result = conn.execute(sql_command).fetchall()
+        cbx_cat = QtWidgets.QComboBox(self.tbl_items)
+        for i in result:
+            cbx_cat.addItem(i["cat_name"], i["cat_id"])
+        cbx_cat.view().setMinimumWidth(cbx_cat.minimumSizeHint().width())
+        self.tbl_items.setCellWidget(self.selectedRow, 8, cbx_cat)
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                                select * 
+                                from vendors;
+                                """
+            result = conn.execute(sql_command).fetchall()
+        cbx_cat = QtWidgets.QComboBox(self.tbl_items)
+        for i in result:
+            cbx_cat.addItem(i["vd_name"], i["vd_id"])
+        cbx_cat.view().setMinimumWidth(cbx_cat.minimumSizeHint().width())
+        self.tbl_items.setCellWidget(self.selectedRow, 9, cbx_cat)
 
     def search_cat(self, cat):
         if self.s_cat == "Show All":
@@ -343,12 +392,21 @@ class Ui_frm_mywh(object):
             self.tbl_sort_column = 9
             self.tbl_sort_order = QtCore.Qt.DescendingOrder
 
-    # Display data
-    def searchDB(self):
+    def disableChange(self):
+        self.btn_search.setEnabled(False)
+        self.txt_search.setEnabled(False)
+        self.btn_insert.setEnabled(False)
+        self.btn_export.setEnabled(False)
+
+    def enableChange(self):
         self.btn_search.setEnabled(True)
         self.txt_search.setEnabled(True)
         self.btn_insert.setEnabled(True)
         self.btn_export.setEnabled(True)
+
+    # Display data
+    def searchDB(self):
+        self.enableChange()
         self.clear_table()
         self.setSearchOrder()
         search_text = '%' + self.txt_search.text() + '%'
@@ -429,10 +487,7 @@ class Ui_frm_mywh(object):
 
     # Freeze search, allow edit
     def updaterow(self, prod_id):
-        self.btn_search.setEnabled(False)
-        self.txt_search.setEnabled(False)
-        self.btn_insert.setEnabled(False)
-        self.btn_export.setEnabled(False)
+        self.disableChange()
         for i in range(self.tbl_items.rowCount()):
             if self.tbl_items.item(i, 2).text() == str(prod_id):
                 self.selectedRow = i
