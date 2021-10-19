@@ -249,6 +249,8 @@ class Ui_frm_mywh(object):
     def searchDB(self):
         self.btn_search.setEnabled(True)
         self.txt_search.setEnabled(True)
+        self.btn_insert.setEnabled(True)
+        self.btn_export.setEnabled(True)
         self.clear_table()
         search_text = '%' + self.txt_search.text() + '%'
         with sqlite3.connect(self.dbpath) as conn:
@@ -318,16 +320,19 @@ class Ui_frm_mywh(object):
     def updaterow(self, prod_id):
         self.btn_search.setEnabled(False)
         self.txt_search.setEnabled(False)
+        self.btn_insert.setEnabled(False)
+        self.btn_export.setEnabled(False)
         for i in range(self.tbl_items.rowCount()):
             if self.tbl_items.item(i, 2).text() == str(prod_id):
                 self.selectedRow = i
             btn = self.tbl_items.cellWidget(i, 0)
             btn.disconnect()
             btn.clicked.connect(self.nonesubmiterror)
+            self.tbl_items.cellWidget(i, 1).setEnabled(False)
         c0 = self.tbl_items.cellWidget(self.selectedRow, 0)
         self.afterRetranslateUi(c0, "Submit")
         c0.disconnect()
-        c0.clicked.connect(lambda state, x=self.selectedRow: self.submitrow())
+        c0.clicked.connect(lambda state, x=self.selectedRow: self.submitrow)
         font = QtGui.QFont()
         font.setFamily("Kanit Light")
         font.setBold(True)
@@ -413,32 +418,6 @@ class Ui_frm_mywh(object):
             with sqlite3.connect(self.dbpath) as conn:
                 conn.execute(sql_command, query_data)
             self.searchDB()
-            # for i in range(self.tbl_items.rowCount()):
-            #     btn = self.tbl_items.cellWidget(i, 0)
-            #     btn.disconnect()
-            #     btn.clicked.connect(lambda state, x=btn.id: self.updaterow(x))
-            #     self.afterRetranslateUi(btn, "Update")
-            # font = QtGui.QFont()
-            # font.setFamily("Kanit Light")
-            # font.setBold(False)
-            # font.setPointSize(12)
-            # c2 = self.tbl_items.item(row, 1)
-            # c2.setFont(font)
-            # c3 = self.tbl_items.item(row, 2)
-            # c3.setFlags(c3.flags() & ~QtCore.Qt.ItemIsEditable)
-            # c4 = self.tbl_items.item(row, 3)
-            # c4.setFlags(c4.flags() & ~QtCore.Qt.ItemIsEditable)
-            # c5 = self.tbl_items.item(row, 4)
-            # c5.setFlags(c5.flags() & ~QtCore.Qt.ItemIsEditable)
-            # c6 = self.tbl_items.item(row, 5)
-            # c6.setFlags(c6.flags() & ~QtCore.Qt.ItemIsEditable)
-            # c7 = QtWidgets.QTableWidgetItem(
-            #     "{:,.2f}฿".format(locale.atof(c5.text()) * locale.atof(c6.text())))
-            # c7.setFont(font)
-            # c7.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-            # self.tbl_items.setItem(row, 6, c7)
-            # self.tbl_items.resizeColumnsToContents()
-            # self.tbl_items.resizeRowsToContents()
 
     def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
         _translate = QtCore.QCoreApplication.translate
