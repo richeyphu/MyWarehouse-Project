@@ -252,28 +252,31 @@ class Ui_frm_mywh(object):
         response = QtWidgets.QMessageBox.question(None, "Submit Insert",
                                                   "Insert new data. Are you sure?".format(self.selectedRow + 1),
                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if response == QtWidgets.QMessageBox.Yes:
-            c3 = self.tbl_items.item(self.selectedRow, 3)  # Product Name
-            prod_name = c3.text()
-            c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
-            prod_desc = c4.text()
-            c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
-            prod_upc = locale.atof(c5.text())
-            c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
-            prod_qty = int(c6.text())
-            c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
-            cat_id = c8.itemData(c8.currentIndex())
-            c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
-            vd_id = c9.itemData(c9.currentIndex())
-            query_data = [prod_name, prod_desc, prod_upc, prod_qty, cat_id, vd_id, datetime.now()]
-            column_name = "prod_name,prod_desc,prod_price,prod_qty,cat_id,vd_id,last_modified"
-            sql_command = """
-                            Insert into Products ({})
-                            Values (?,?,?,?,?,?,?);
-                            """.format(column_name)
-            with sqlite3.connect(self.dbpath) as conn:
-                conn.execute(sql_command, query_data)
-            self.searchDB()
+        try:
+            if response == QtWidgets.QMessageBox.Yes:
+                c3 = self.tbl_items.item(self.selectedRow, 3)  # Product Name
+                prod_name = c3.text()
+                c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
+                prod_desc = c4.text()
+                c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
+                prod_upc = locale.atof(c5.text())
+                c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
+                prod_qty = locale.atof(c6.text())
+                c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
+                cat_id = c8.itemData(c8.currentIndex())
+                c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
+                vd_id = c9.itemData(c9.currentIndex())
+                query_data = [prod_name, prod_desc, prod_upc, prod_qty, cat_id, vd_id, datetime.now()]
+                column_name = "prod_name,prod_desc,prod_price,prod_qty,cat_id,vd_id,last_modified"
+                sql_command = """
+                                Insert into Products ({})
+                                Values (?,?,?,?,?,?,?);
+                                """.format(column_name)
+                with sqlite3.connect(self.dbpath) as conn:
+                    conn.execute(sql_command, query_data)
+                self.searchDB()
+        except Exception as e:
+            QtWidgets.QMessageBox.about(self.this, "Error", str(e))
 
     # Insert into table
     def cellInsert(self):
@@ -585,30 +588,33 @@ class Ui_frm_mywh(object):
         response = QtWidgets.QMessageBox.question(None, "Submit Change",
                                                   "Change on row {}. Are you sure?".format(self.selectedRow + 1),
                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if response == QtWidgets.QMessageBox.Yes:
-            c2 = self.tbl_items.item(self.selectedRow, 2)  # Product ID
-            prod_id = c2.text()
-            c3 = self.tbl_items.item(self.selectedRow, 3)  # Product Name
-            prod_name = c3.text()
-            c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
-            prod_desc = c4.text()
-            c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
-            prod_upc = locale.atof(c5.text())
-            c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
-            prod_qty = int(c6.text())
-            c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
-            cat_id = c8.itemData(c8.currentIndex())
-            c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
-            vd_id = c9.itemData(c9.currentIndex())
-            query_data = [prod_name, prod_desc, prod_upc, prod_qty, cat_id, vd_id, datetime.now(), prod_id]
-            sql_command = """
-                        Update Products
-                        set prod_name = ?, prod_desc = ?, prod_price = ?, prod_qty = ?, cat_id = ?, vd_id = ?, last_modified = ?
-                        where prod_id = ?;
-                        """
-            with sqlite3.connect(self.dbpath) as conn:
-                conn.execute(sql_command, query_data)
-            self.searchDB()
+        try:
+            if response == QtWidgets.QMessageBox.Yes:
+                c2 = self.tbl_items.item(self.selectedRow, 2)  # Product ID
+                prod_id = c2.text()
+                c3 = self.tbl_items.item(self.selectedRow, 3)  # Product Name
+                prod_name = c3.text()
+                c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
+                prod_desc = c4.text()
+                c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
+                prod_upc = locale.atof(c5.text())
+                c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
+                prod_qty = locale.atof(c6.text())
+                c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
+                cat_id = c8.itemData(c8.currentIndex())
+                c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
+                vd_id = c9.itemData(c9.currentIndex())
+                query_data = [prod_name, prod_desc, prod_upc, prod_qty, cat_id, vd_id, datetime.now(), prod_id]
+                sql_command = """
+                            Update Products
+                            set prod_name = ?, prod_desc = ?, prod_price = ?, prod_qty = ?, cat_id = ?, vd_id = ?, last_modified = ?
+                            where prod_id = ?;
+                            """
+                with sqlite3.connect(self.dbpath) as conn:
+                    conn.execute(sql_command, query_data)
+                self.searchDB()
+        except Exception as e:
+            QtWidgets.QMessageBox.about(self.this, "Error", str(e))
 
     def afterRetranslateUi(self, btn: QtWidgets.QPushButton, text: str):
         _translate = QtCore.QCoreApplication.translate
