@@ -1,5 +1,16 @@
 # User Generated Classes
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
+
+
+class WhTableNumberItem(QtWidgets.QTableWidgetItem):
+    def __init__(self, text: str):
+        super(WhTableNumberItem, self).__init__(text)
+
+    def __lt__(self, other):
+        try:
+            return self.data(QtCore.Qt.UserRole) < other.data(QtCore.Qt.UserRole)
+        except:
+            return super(WhTableNumberItem, self).__lt__(other)
 
 
 class WhButton(QtWidgets.QPushButton):

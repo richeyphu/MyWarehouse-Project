@@ -195,11 +195,50 @@ class Ui_frm_mywh(object):
         frm_mywh.setTabOrder(self.btn_save, self.btn_export)
 
         # Event-Driven
-        self.tbl_sort_column: int = 2
-        self.tbl_sort_order: int = QtCore.Qt.AscendingOrder
+        self.setupSearchOrder()
         self.searchDB()
         self.btn_search.clicked.connect(self.searchDB)
         self.btn_insert.clicked.connect(self.cellInsert)
+
+    def setupSearchOrder(self):
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                                select * 
+                                from vendors;
+                                """
+            result = conn.execute(sql_command).fetchall()
+        self.cmb_vendor.clear()
+        self.cmb_vendor.addItem("Show All", -1)
+        for i in result:
+            self.cmb_vendor.addItem(i["vd_name"], i["vd_id"])
+        self.cmb_vendor.view().setMinimumWidth(self.cmb_vendor.minimumSizeHint().width())
+        with sqlite3.connect(self.dbpath) as conn:
+            conn.row_factory = sqlite3.Row
+            sql_command = """
+                                select * 
+                                from categories;
+                                """
+            result = conn.execute(sql_command).fetchall()
+        self.cmb_cat.clear()
+        self.cmb_cat.addItem("Show All", -1)
+        for i in result:
+            self.cmb_cat.addItem(i["cat_name"], i["cat_id"])
+        self.cmb_cat.view().setMinimumWidth(self.cmb_cat.minimumSizeHint().width())
+        for i in range(self.cmb_order.count()):
+            self.cmb_order.setItemData(i, i)
+        # self.cmb_order.setItemText(0, _translate("frm_mywh", "ID ▲"))             2
+        # self.cmb_order.setItemText(1, _translate("frm_mywh", "ID ▼"))             2
+        # self.cmb_order.setItemText(2, _translate("frm_mywh", "Name (A-Z)"))       3
+        # self.cmb_order.setItemText(3, _translate("frm_mywh", "Name (Z-A)"))       3
+        # self.cmb_order.setItemText(4, _translate("frm_mywh", "QTY ▲"))            6
+        # self.cmb_order.setItemText(5, _translate("frm_mywh", "QTY ▼"))            6
+        # self.cmb_order.setItemText(6, _translate("frm_mywh", "Unit Price ▲"))     5
+        # self.cmb_order.setItemText(7, _translate("frm_mywh", "Unit Price ▼"))     5
+        # self.cmb_order.setItemText(8, _translate("frm_mywh", "Total ▲"))          7
+        # self.cmb_order.setItemText(9, _translate("frm_mywh", "Total ▼"))          7
+        # self.cmb_order.setItemText(10, _translate("frm_mywh", "Vendor (A-Z)"))    9
+        # self.cmb_order.setItemText(11, _translate("frm_mywh", "Vendor (Z-A)"))    9
 
     def clear_table(self):
         for i in range(self.tbl_items.rowCount()):
@@ -245,6 +284,69 @@ class Ui_frm_mywh(object):
         c6.setFlags(c6.flags() & ~QtCore.Qt.ItemIsEditable)
         self.tbl_items.setItem(0, 6, c6)
 
+    def search_cat(self, cat):
+        if hasattr(self, "s_cat"):
+            if self.s_cat == "Show All":
+                return True
+            if self.s_cat == cat:
+                print(1)
+                return True
+            return False
+        return True
+
+    def search_vd(self, vd):
+        if hasattr(self, "s_vd"):
+            if self.s_vd == "Show All":
+                return True
+            if self.s_vd == vd:
+                print(2)
+                return True
+            return False
+        return True
+
+    def setSearchOrder(self):
+        # Set Vendor
+        self.s_vd = self.cmb_vendor.currentText()
+        # Set Catagory
+        self.s_cat = self.cmb_cat.currentText()
+        # Set Order
+        if self.cmb_order.currentData() == 0:
+            self.tbl_sort_column = 2
+            self.tbl_sort_order = QtCore.Qt.AscendingOrder
+        if self.cmb_order.currentData() == 1:
+            self.tbl_sort_column = 2
+            self.tbl_sort_order = QtCore.Qt.DescendingOrder
+        if self.cmb_order.currentData() == 2:
+            self.tbl_sort_column = 3
+            self.tbl_sort_order = QtCore.Qt.AscendingOrder
+        if self.cmb_order.currentData() == 3:
+            self.tbl_sort_column = 3
+            self.tbl_sort_order = QtCore.Qt.DescendingOrder
+        if self.cmb_order.currentData() == 4:
+            self.tbl_sort_column = 6
+            self.tbl_sort_order = QtCore.Qt.AscendingOrder
+        if self.cmb_order.currentData() == 5:
+            self.tbl_sort_column = 6
+            self.tbl_sort_order = QtCore.Qt.DescendingOrder
+        if self.cmb_order.currentData() == 6:
+            self.tbl_sort_column = 5
+            self.tbl_sort_order = QtCore.Qt.AscendingOrder
+        if self.cmb_order.currentData() == 7:
+            self.tbl_sort_column = 5
+            self.tbl_sort_order = QtCore.Qt.DescendingOrder
+        if self.cmb_order.currentData() == 8:
+            self.tbl_sort_column = 7
+            self.tbl_sort_order = QtCore.Qt.AscendingOrder
+        if self.cmb_order.currentData() == 9:
+            self.tbl_sort_column = 7
+            self.tbl_sort_order = QtCore.Qt.DescendingOrder
+        if self.cmb_order.currentData() == 10:
+            self.tbl_sort_column = 9
+            self.tbl_sort_order = QtCore.Qt.AscendingOrder
+        if self.cmb_order.currentData() == 11:
+            self.tbl_sort_column = 9
+            self.tbl_sort_order = QtCore.Qt.DescendingOrder
+
     # Display data
     def searchDB(self):
         self.btn_search.setEnabled(True)
@@ -252,6 +354,7 @@ class Ui_frm_mywh(object):
         self.btn_insert.setEnabled(True)
         self.btn_export.setEnabled(True)
         self.clear_table()
+        self.setSearchOrder()
         search_text = '%' + self.txt_search.text() + '%'
         with sqlite3.connect(self.dbpath) as conn:
             conn.row_factory = sqlite3.Row
@@ -267,50 +370,64 @@ class Ui_frm_mywh(object):
                                 """
             result = conn.execute(sql_command, [search_text, search_text, search_text]).fetchall()
         self.tbl_items.setRowCount(len(result))
-        self.lbl_found.setText("พบ {} รายการ".format(len(result)))
+        sort_role = QtCore.Qt.UserRole
         row = 0
         for i in result:
-            tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
-            tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.updaterow(x))
-            self.afterRetranslateUi(tempbtn, "Update")
-            self.tbl_items.setCellWidget(row, 0, tempbtn)  # Update Button Column
-            tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
-            tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.deleteRow(x))
-            self.afterRetranslateUi(tempbtn, "Delete")
-            self.tbl_items.setCellWidget(row, 1, tempbtn)  # Delete Button Column
-            item = QtWidgets.QTableWidgetItem(str(i["prod_id"]))
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            item.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.tbl_items.setItem(row, 2, item)  # Product ID Column
-            item = QtWidgets.QTableWidgetItem(i["prod_name"])
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            self.tbl_items.setItem(row, 3, item)  # Product Name Column
-            item = QtWidgets.QTableWidgetItem(i["prod_desc"])
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            self.tbl_items.setItem(row, 4, item)  # Product Description Column
-            item = QtWidgets.QTableWidgetItem("{:,.2f}".format(i["prod_price"]))
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-            self.tbl_items.setItem(row, 5, item)  # Product Price Column
-            item = QtWidgets.QTableWidgetItem("{:,.0f}".format(i["prod_qty"]))
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            item.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.tbl_items.setItem(row, 6, item)  # Product Quantity Column
-            item = QtWidgets.QTableWidgetItem("{:,.2f}฿".format(float(i["prod_price"]) * float(i["prod_qty"])))
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-            self.tbl_items.setItem(row, 7, item)  # Total Product Value Column
-            item = QtWidgets.QTableWidgetItem(i["cat_name"])
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            item.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.tbl_items.setItem(row, 8, item)  # Product Catagory Column
-            item = QtWidgets.QTableWidgetItem(i["vd_name"])
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
-            item.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.tbl_items.setItem(row, 9, item)  # Product Vendor Column
-            row += 1
+            if self.search_cat(i["cat_name"]) and self.search_vd(i["vd_name"]):
+                tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
+                tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.updaterow(x))
+                self.afterRetranslateUi(tempbtn, "Update")
+                self.tbl_items.setCellWidget(row, 0, tempbtn)  # Update Button Column
+                tempbtn = Wl.WhButton(i["prod_id"], self.tbl_items)
+                tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.deleteRow(x))
+                self.afterRetranslateUi(tempbtn, "Delete")
+                self.tbl_items.setCellWidget(row, 1, tempbtn)  # Delete Button Column
+                item = QtWidgets.QTableWidgetItem(str(i["prod_id"]))
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                item.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+                item.setData(sort_role, i["prod_id"])
+                self.tbl_items.setItem(row, 2, item)  # Product ID Column
+                item = QtWidgets.QTableWidgetItem(i["prod_name"])
+                item.setData(sort_role, i["prod_name"])
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                self.tbl_items.setItem(row, 3, item)  # Product Name Column
+                item = QtWidgets.QTableWidgetItem(i["prod_desc"])
+                item.setData(sort_role, i["prod_desc"])
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                self.tbl_items.setItem(row, 4, item)  # Product Description Column
+                # item = QtWidgets.QTableWidgetItem("{:,.2f}".format(i["prod_price"]))
+                item = Wl.WhTableNumberItem("{:,.2f}".format(i["prod_price"]))
+                item.setData(sort_role, i["prod_price"])
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                self.tbl_items.setItem(row, 5, item)  # Product Price Column
+                item = Wl.WhTableNumberItem("{:,.0f}".format(i["prod_qty"]))
+                item.setData(sort_role, i["prod_qty"])
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                self.tbl_items.setItem(row, 6, item)  # Product Quantity Column
+                item = QtWidgets.QTableWidgetItem("{:,.2f}฿".format(i["prod_price"] * float(i["prod_qty"])))
+                item.setData(sort_role, i["prod_price"] * float(i["prod_qty"]))
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                item.setTextAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                self.tbl_items.setItem(row, 7, item)  # Total Product Value Column
+                item = QtWidgets.QTableWidgetItem(i["cat_name"])
+                item.setData(sort_role, i["cat_name"])
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                self.tbl_items.setItem(row, 8, item)  # Product Catagory Column
+                item = QtWidgets.QTableWidgetItem(i["vd_name"])
+                item.setData(sort_role, i["vd_name"])
+                item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                self.tbl_items.setItem(row, 9, item)  # Product Vendor Column
+                row += 1
+        self.tbl_items.setRowCount(row)
+        self.lbl_found.setText("พบ {} รายการ".format(row))
         self.tbl_items.resizeColumnsToContents()
         self.tbl_items.resizeRowsToContents()
+        sortFilderProxyModel = QtCore.QSortFilterProxyModel(self.tbl_items)
+
         self.tbl_items.sortItems(self.tbl_sort_column, self.tbl_sort_order)
         self.tbl_items.setColumnWidth(0, 60)
         self.tbl_items.setColumnWidth(1, 60)
