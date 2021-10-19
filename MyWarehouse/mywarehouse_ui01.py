@@ -18,6 +18,8 @@ locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 class Ui_frm_mywh(object):
     def setupUi(self, frm_mywh):
+        QtWidgets.QMessageBox.about(None, "Wrong File", "Not the current File. Abort!")
+        exit()
         self.dbpath = "mywh_db.sqlite3"
         frm_mywh.setObjectName("frm_mywh")
         frm_mywh.resize(1000, 770)
