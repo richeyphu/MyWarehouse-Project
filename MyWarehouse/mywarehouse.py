@@ -594,7 +594,7 @@ class Ui_frm_mywh(object):
             c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
             prod_desc = c4.text()
             c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
-            prod_upc = float(c5.text())
+            prod_upc = locale.atof(c5.text())
             c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
             prod_qty = int(c6.text())
             c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
