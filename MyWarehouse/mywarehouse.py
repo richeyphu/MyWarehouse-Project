@@ -258,7 +258,7 @@ class Ui_frm_mywh(object):
             c4 = self.tbl_items.item(self.selectedRow, 4)  # Product Details
             prod_desc = c4.text()
             c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
-            prod_upc = float(c5.text())
+            prod_upc = locale.atof(c5.text())
             c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
             prod_qty = int(c6.text())
             c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
@@ -292,7 +292,6 @@ class Ui_frm_mywh(object):
                             where name = 'PRODUCTS';
                             """
             n_id = int(conn.execute(sql_command).fetchall()[0]["seq"]) + 1
-        print("hi")
         self.tbl_items.insertRow(self.selectedRow)
         tempbtn = Wl.WhButton(n_id, self.tbl_items)
         tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert(x))
@@ -338,7 +337,6 @@ class Ui_frm_mywh(object):
         if self.s_cat == "Show All":
             return True
         if self.s_cat == cat:
-            print(1)
             return True
         return False
 
@@ -346,7 +344,6 @@ class Ui_frm_mywh(object):
         if self.s_vd == "Show All":
             return True
         if self.s_vd == vd:
-            print(2)
             return True
         return False
 
