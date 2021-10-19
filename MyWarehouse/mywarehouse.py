@@ -434,7 +434,7 @@ class Ui_frm_mywh(object):
                 tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.deleteRow(x))
                 self.afterRetranslateUi(tempbtn, "Delete")
                 self.tbl_items.setCellWidget(row, 1, tempbtn)  # Delete Button Column
-                item = QtWidgets.QTableWidgetItem(str(i["prod_id"]))
+                item = Wl.WhTableNumberItem(str(i["prod_id"]))
                 item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
                 item.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
                 item.setData(sort_role, i["prod_id"])
@@ -557,10 +557,9 @@ class Ui_frm_mywh(object):
                                 Where prod_id = ?;
                                 """
                 conn.execute(sql_command, [prod_id])
-                self.searchDB()
+            self.searchDB()
 
     def exportAsCVS(self):
-        # fdl = Wl.WhFileDialog(self)
         save = Wl.WhFileDialog(self.this).getSaveFileName(self.this, "Save File", "Untitled.csv")
         if save[0]:
             with open(file=save[0], mode="w", encoding="utf-8", newline="") as fn:
