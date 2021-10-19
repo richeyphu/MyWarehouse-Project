@@ -294,7 +294,7 @@ class Ui_frm_mywh(object):
             n_id = int(conn.execute(sql_command).fetchall()[0]["seq"]) + 1
         self.tbl_items.insertRow(self.selectedRow)
         tempbtn = Wl.WhButton(n_id, self.tbl_items)
-        tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert(x))
+        tempbtn.clicked.connect(lambda state, x=tempbtn.id: self.saveInsert())
         self.afterRetranslateUi(tempbtn, "Save")
         self.tbl_items.setCellWidget(0, 0, tempbtn)
         c2 = QtWidgets.QTableWidgetItem("{}".format(n_id))
