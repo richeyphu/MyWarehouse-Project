@@ -20,7 +20,7 @@ locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 class Ui_frm_mywh(object):
     def setupUi(self, frm_mywh):
-        self.dbpath = "mywh_db.sqlite3"
+        self.dbpath = ".\mywh_db.sqlite3"
         if not Path(self.dbpath).is_file():
             QtWidgets.QMessageBox.about(None, "Error No Database",
                                         "Cannot find Database. Has the database been moved or deleted?")
