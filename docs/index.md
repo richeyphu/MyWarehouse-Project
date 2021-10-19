@@ -27,10 +27,14 @@ $ repo init -u https://github.com/richeyphu/MyWarehouse-Project.git
 ```
 
 ### Required Packages
-- [`PyQt5`](https://pypi.org/project/PyQt5/)
-- [`PyQt5-stubs`](https://pypi.org/project/PyQt5-stubs/)
-- [`pyqt5-tools`](https://pypi.org/project/pyqt5-tools/)
+- [`PyQt5==5.15.4`](https://pypi.org/project/PyQt5/)
+- [`PyQt5-stubs==5.15.4.3.2`](https://pypi.org/project/PyQt5-stubs/)
+- [`pyqt5-tools==5.15.2.0`](https://pypi.org/project/pyqt5-tools/)
 
+installing package
+```bash
+$ pip install -r requirements.txt
+```
 
 ## Usage
 ---
