@@ -248,7 +248,7 @@ class Ui_frm_mywh(object):
             self.tbl_items.removeRow(0)
 
     # Insert into database
-    def saveInsert(self, x):
+    def saveInsert(self):
         response = QtWidgets.QMessageBox.question(None, "Submit Insert",
                                                   "Insert new data. Are you sure?".format(self.selectedRow + 1),
                                                   QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
