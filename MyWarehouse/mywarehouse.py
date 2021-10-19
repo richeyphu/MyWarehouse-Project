@@ -332,7 +332,7 @@ class Ui_frm_mywh(object):
         c0 = self.tbl_items.cellWidget(self.selectedRow, 0)
         self.afterRetranslateUi(c0, "Submit")
         c0.disconnect()
-        c0.clicked.connect(lambda state, x=self.selectedRow: self.submitrow)
+        c0.clicked.connect(lambda state, x=self.selectedRow: self.submitrow())
         font = QtGui.QFont()
         font.setFamily("Kanit Light")
         font.setBold(True)
