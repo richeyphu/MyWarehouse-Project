@@ -265,7 +265,7 @@ class Ui_frm_mywh(object):
                 c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
                 prod_upc = locale.atof(c5.text())
                 c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
-                prod_qty = locale.atof(c6.text())
+                prod_qty = locale.atoi(c6.text())
                 c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
                 cat_id = c8.itemData(c8.currentIndex())
                 c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
@@ -603,7 +603,7 @@ class Ui_frm_mywh(object):
                 c5 = self.tbl_items.item(self.selectedRow, 5)  # Product Unit Price
                 prod_upc = locale.atof(c5.text())
                 c6 = self.tbl_items.item(self.selectedRow, 6)  # Product Qty
-                prod_qty = locale.atof(c6.text())
+                prod_qty = locale.atoi(c6.text())
                 c8: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 8)  # Catagory ID
                 cat_id = c8.itemData(c8.currentIndex())
                 c9: QtWidgets.QComboBox = self.tbl_items.cellWidget(self.selectedRow, 9)  # Vendor ID
