@@ -14,7 +14,6 @@ import locale
 import csv
 from datetime import datetime
 from pathlib import Path
-from pywinauto import Desktop
 
 locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
