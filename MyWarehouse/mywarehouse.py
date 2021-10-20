@@ -279,13 +279,13 @@ class Ui_frm_mywh(object):
                 with sqlite3.connect(self.dbpath) as conn:
                     conn.execute(sql_command, query_data)
                 self.searchDB()
-            except ValueError as e:
-                if e.args[0].find("invalid literal for int() with base 10:") == 0:
-                    QtWidgets.QMessageBox.about(self.this, "Error", "Cannot convert String to Int : '{}'".format(
-                        str(e.args[0]).replace("invalid literal for int() with base 10:", "")))
-                    return
-                QtWidgets.QMessageBox.about(self.this, "Error", str(e))
-            except Exception as e:
+        except ValueError as e:
+            if e.args[0].find("invalid literal for int() with base 10:") == 0:
+                QtWidgets.QMessageBox.about(self.this, "Error", "Cannot convert String to Int : '{}'".format(
+                    str(e.args[0]).replace("invalid literal for int() with base 10:", "")))
+                return
+            QtWidgets.QMessageBox.about(self.this, "Error", str(e))
+        except Exception as e:
             QtWidgets.QMessageBox.about(self.this, "Error", str(e))
 
     # Insert into table
