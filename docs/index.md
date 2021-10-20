@@ -46,8 +46,7 @@ $ python3 mywarehouse.py
 1. Insert
 2. Update
 3. Delete
-4. Commit
-5. Export
+4. Export
 
 
 ## Development Tools
