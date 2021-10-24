@@ -40,7 +40,7 @@ $ pip install -r requirements.txt
 ---
 ### Runs
 ```bash
-$ python3 mywarehouse.py
+$ python mywarehouse.py
 ```
 ### Functions
 1. Insert
